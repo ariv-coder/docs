@@ -1,0 +1,157 @@
+---
+title: 'Get Call'
+api: 'GET https://api.voicebook.ai/v1/calls/{call_id}'
+description: 'Retrieve details of a specific call'
+---
+
+## Request
+
+Retrieve detailed information about a specific call, including its status, duration, transcript, and recording URL.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token for authentication. Format: `Bearer YOUR_API_KEY`
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="call_id" type="string" required>
+  The unique identifier of the call (e.g., `call_xyz789`)
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="include" type="string">
+  Comma-separated list of additional data to include: `transcript`, `recording`, `analysis`
+</ParamField>
+
+## Response
+
+<ResponseField name="id" type="string">
+  Unique identifier for the call
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Current status: `queued`, `ringing`, `in_progress`, `completed`, `failed`, `no_answer`, `busy`
+</ResponseField>
+
+<ResponseField name="phone_number" type="string">
+  The destination phone number
+</ResponseField>
+
+<ResponseField name="from_number" type="string">
+  The phone number the call was made from
+</ResponseField>
+
+<ResponseField name="agent_id" type="string">
+  The agent ID used for the call
+</ResponseField>
+
+<ResponseField name="duration" type="integer">
+  Call duration in seconds (only present when completed)
+</ResponseField>
+
+<ResponseField name="transcript" type="array">
+  Array of transcript segments (when `include=transcript`)
+</ResponseField>
+
+<ResponseField name="recording_url" type="string">
+  URL to the call recording (when `include=recording` and recording is available)
+</ResponseField>
+
+<ResponseField name="analysis" type="object">
+  AI-generated analysis of the call (when `include=analysis`)
+</ResponseField>
+
+<ResponseField name="metadata" type="object">
+  Custom metadata attached to the call
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  ISO 8601 timestamp of when the call was created
+</ResponseField>
+
+<ResponseField name="ended_at" type="string">
+  ISO 8601 timestamp of when the call ended
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl https://api.voicebook.ai/v1/calls/call_xyz789?include=transcript,recording \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```javascript Node.js
+const response = await fetch(
+  'https://api.voicebook.ai/v1/calls/call_xyz789?include=transcript,recording',
+  {
+    headers: {
+      'Authorization': 'Bearer YOUR_API_KEY',
+    },
+  }
+);
+
+const call = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.voicebook.ai/v1/calls/call_xyz789',
+    headers={'Authorization': 'Bearer YOUR_API_KEY'},
+    params={'include': 'transcript,recording'}
+)
+
+call = response.json()
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 - Success
+{
+  "id": "call_xyz789",
+  "status": "completed",
+  "phone_number": "+14155551234",
+  "from_number": "+18005551234",
+  "agent_id": "agent_abc123",
+  "duration": 245,
+  "transcript": [
+    {
+      "role": "agent",
+      "content": "Hello! This is Sarah from Acme Corp. How are you today?",
+      "timestamp": 0.0
+    },
+    {
+      "role": "user",
+      "content": "Hi Sarah, I'm doing well. What's this call about?",
+      "timestamp": 3.2
+    }
+  ],
+  "recording_url": "https://storage.voicebook.ai/recordings/call_xyz789.mp3",
+  "metadata": {
+    "customer_id": "cust_456",
+    "campaign": "follow_up"
+  },
+  "created_at": "2024-01-15T10:30:00Z",
+  "ended_at": "2024-01-15T10:34:05Z"
+}
+```
+
+```json 404 - Not Found
+{
+  "error": {
+    "code": "call_not_found",
+    "message": "The specified call does not exist"
+  }
+}
+```
+</ResponseExample>
+
+## Error Codes
+
+| Code | Description |
+|------|-------------|
+| `call_not_found` | The specified call_id does not exist |
+| `unauthorized` | You don't have access to this call |

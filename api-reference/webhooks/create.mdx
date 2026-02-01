@@ -1,0 +1,203 @@
+---
+title: 'Create Webhook'
+api: 'POST https://api.voicebook.ai/v1/webhooks'
+description: 'Create a new webhook endpoint'
+---
+
+## Request
+
+Create a new webhook endpoint to receive real-time events from VoiceBook AI.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token for authentication. Format: `Bearer YOUR_API_KEY`
+</ParamField>
+
+<ParamField header="Content-Type" type="string" required>
+  Must be `application/json`
+</ParamField>
+
+### Body Parameters
+
+<ParamField body="url" type="string" required>
+  The HTTPS URL to receive webhook events
+</ParamField>
+
+<ParamField body="events" type="array" required>
+  Array of event types to subscribe to. Use `["*"]` for all events.
+  
+  Available events:
+  - `call.started` - Call has been initiated
+  - `call.ringing` - Call is ringing
+  - `call.answered` - Call was answered
+  - `call.completed` - Call ended successfully
+  - `call.failed` - Call failed
+  - `call.recording.ready` - Recording is available
+  - `call.transcript.ready` - Transcript is available
+  - `agent.created` - New agent created
+  - `agent.updated` - Agent was updated
+  - `agent.deleted` - Agent was deleted
+</ParamField>
+
+<ParamField body="secret" type="string">
+  A secret key for signing webhook payloads. Auto-generated if not provided.
+</ParamField>
+
+<ParamField body="description" type="string">
+  A description for this webhook endpoint
+</ParamField>
+
+<ParamField body="metadata" type="object">
+  Custom key-value pairs for your reference
+</ParamField>
+
+## Response
+
+<ResponseField name="id" type="string">
+  Unique identifier for the webhook
+</ResponseField>
+
+<ResponseField name="url" type="string">
+  The webhook URL
+</ResponseField>
+
+<ResponseField name="events" type="array">
+  Subscribed event types
+</ResponseField>
+
+<ResponseField name="secret" type="string">
+  The webhook signing secret (only shown on creation)
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Webhook status: `active`, `inactive`, `failing`
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  ISO 8601 timestamp
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl -X POST https://api.voicebook.ai/v1/webhooks \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://your-app.com/webhooks/voicebook",
+    "events": ["call.completed", "call.recording.ready"],
+    "description": "Production webhook"
+  }'
+```
+
+```javascript Node.js
+const response = await fetch('https://api.voicebook.ai/v1/webhooks', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    url: 'https://your-app.com/webhooks/voicebook',
+    events: ['call.completed', 'call.recording.ready'],
+    description: 'Production webhook'
+  })
+});
+
+const webhook = await response.json();
+// Save webhook.secret securely!
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.voicebook.ai/v1/webhooks',
+    headers={
+        'Authorization': 'Bearer YOUR_API_KEY',
+        'Content-Type': 'application/json',
+    },
+    json={
+        'url': 'https://your-app.com/webhooks/voicebook',
+        'events': ['call.completed', 'call.recording.ready'],
+        'description': 'Production webhook'
+    }
+)
+
+webhook = response.json()
+# Save webhook['secret'] securely!
+```
+</RequestExample>
+
+<ResponseExample>
+```json 201 - Created
+{
+  "id": "wh_abc123",
+  "url": "https://your-app.com/webhooks/voicebook",
+  "events": ["call.completed", "call.recording.ready"],
+  "secret": "whsec_a1b2c3d4e5f6g7h8i9j0...",
+  "description": "Production webhook",
+  "status": "active",
+  "metadata": {},
+  "created_at": "2024-01-15T10:30:00Z"
+}
+```
+
+```json 400 - Bad Request
+{
+  "error": {
+    "code": "invalid_url",
+    "message": "Webhook URL must be HTTPS"
+  }
+}
+```
+
+```json 402 - Limit Reached
+{
+  "error": {
+    "code": "webhook_limit_reached",
+    "message": "Maximum number of webhooks reached for your plan"
+  }
+}
+```
+</ResponseExample>
+
+## Verifying Webhooks
+
+Use the `secret` to verify incoming webhooks:
+
+```javascript
+const crypto = require('crypto');
+
+function verifyWebhook(payload, signature, secret) {
+  const expectedSignature = crypto
+    .createHmac('sha256', secret)
+    .update(payload)
+    .digest('hex');
+  
+  return crypto.timingSafeEqual(
+    Buffer.from(signature),
+    Buffer.from(expectedSignature)
+  );
+}
+
+// In your webhook handler:
+app.post('/webhooks/voicebook', (req, res) => {
+  const signature = req.headers['x-voicebook-signature'];
+  
+  if (!verifyWebhook(JSON.stringify(req.body), signature, WEBHOOK_SECRET)) {
+    return res.status(401).send('Invalid signature');
+  }
+  
+  // Process the webhook...
+});
+```
+
+## Error Codes
+
+| Code | Description |
+|------|-------------|
+| `invalid_url` | URL must be a valid HTTPS endpoint |
+| `invalid_events` | One or more event types are invalid |
+| `webhook_limit_reached` | Maximum webhooks for your plan |
+| `url_unreachable` | Could not reach the webhook URL |

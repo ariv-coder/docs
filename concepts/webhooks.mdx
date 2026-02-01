@@ -1,0 +1,297 @@
+---
+title: Webhooks
+description: "Receive real-time notifications for VoiceBook AI events"
+---
+
+# Webhooks
+
+Webhooks allow you to receive real-time notifications when events happen in VoiceBook AI. Instead of polling the API, events are pushed to your server automatically.
+
+## How Webhooks Work
+
+1. You register a webhook endpoint URL
+2. Select which events you want to receive
+3. When an event occurs, VoiceBook AI sends an HTTP POST to your URL
+4. Your server processes the event and responds with `200 OK`
+
+## Setting Up Webhooks
+
+### Via Dashboard
+
+1. Go to **Dashboard → Developers → Webhooks**
+2. Click **Add Endpoint**
+3. Enter your webhook URL
+4. Select events to receive
+5. Save the signing secret
+
+### Via API
+
+```bash
+curl https://api.voicebook.ai/v1/webhooks \
+  -X POST \
+  -H "Authorization: Bearer vb_live_YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://your-server.com/webhook",
+    "events": ["call.completed", "call.failed", "appointment.created"]
+  }'
+```
+
+Response includes a signing secret:
+
+```json
+{
+  "webhook_id": "wh_abc123",
+  "secret": "whsec_xyz789...",
+  "message": "Save this signing secret securely. It won't be shown again."
+}
+```
+
+## Available Events
+
+### Call Events
+
+| Event | Description |
+|-------|-------------|
+| `call.initiated` | Outbound call started dialing |
+| `call.answered` | Call was answered |
+| `call.completed` | Call ended successfully |
+| `call.failed` | Call failed (error, busy, no answer) |
+| `call.transferred` | Call transferred to human |
+
+### Appointment Events
+
+| Event | Description |
+|-------|-------------|
+| `appointment.created` | New appointment booked |
+| `appointment.updated` | Appointment modified |
+| `appointment.cancelled` | Appointment cancelled |
+| `appointment.reminder` | Reminder was sent |
+
+### Agent Events
+
+| Event | Description |
+|-------|-------------|
+| `agent.created` | New agent created |
+| `agent.updated` | Agent configuration changed |
+
+### Phone Number Events
+
+| Event | Description |
+|-------|-------------|
+| `phone_number.assigned` | New number provisioned |
+| `phone_number.released` | Number released |
+
+### Credit Events
+
+| Event | Description |
+|-------|-------------|
+| `credits.low` | Credit balance below threshold |
+
+## Webhook Payload
+
+All webhooks follow this structure:
+
+```json
+{
+  "event": "call.completed",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "webhook_id": "wh_abc123",
+  "data": {
+    // Event-specific data
+  }
+}
+```
+
+### call.completed Example
+
+```json
+{
+  "event": "call.completed",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "webhook_id": "wh_abc123",
+  "data": {
+    "call_id": "call_abc123",
+    "agent_id": "agent_xyz",
+    "phone_number": "+1234567890",
+    "direction": "outbound",
+    "duration_seconds": 145,
+    "outcome": "appointment_booked",
+    "transcript": "Agent: Hello! Thanks for calling...",
+    "recording_url": "https://...",
+    "extracted_data": {
+      "appointment_date": "2024-01-20",
+      "appointment_time": "14:00",
+      "customer_name": "John Smith"
+    }
+  }
+}
+```
+
+### appointment.created Example
+
+```json
+{
+  "event": "appointment.created",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "webhook_id": "wh_abc123",
+  "data": {
+    "appointment_id": "apt_abc123",
+    "call_id": "call_xyz789",
+    "customer_name": "John Smith",
+    "customer_phone": "+1234567890",
+    "customer_email": "john@example.com",
+    "date": "2024-01-20",
+    "time": "14:00",
+    "service": "Dental Cleaning",
+    "duration_minutes": 45,
+    "notes": "First-time patient"
+  }
+}
+```
+
+## Verifying Webhooks
+
+Always verify webhook signatures to ensure they came from VoiceBook AI.
+
+### Signature Header
+
+Each webhook includes a signature:
+
+```
+X-VoiceBook-Signature: t=1705312800,v1=abc123...
+```
+
+### Verification Example
+
+<CodeGroup>
+```javascript Node.js
+const crypto = require('crypto');
+
+function verifyWebhook(payload, signature, secret) {
+  const [timestamp, hash] = signature.split(',').map(s => s.split('=')[1]);
+  
+  // Check timestamp is recent (within 5 minutes)
+  const age = Date.now() / 1000 - parseInt(timestamp);
+  if (age > 300) {
+    throw new Error('Webhook timestamp too old');
+  }
+  
+  // Verify signature
+  const expected = crypto
+    .createHmac('sha256', secret)
+    .update(`${timestamp}.${payload}`)
+    .digest('hex');
+    
+  if (hash !== expected) {
+    throw new Error('Invalid webhook signature');
+  }
+  
+  return true;
+}
+
+// In your webhook handler
+app.post('/webhook', (req, res) => {
+  const signature = req.headers['x-voicebook-signature'];
+  const payload = JSON.stringify(req.body);
+  
+  try {
+    verifyWebhook(payload, signature, process.env.WEBHOOK_SECRET);
+    // Process the webhook
+    res.sendStatus(200);
+  } catch (error) {
+    res.sendStatus(401);
+  }
+});
+```
+
+```python Python
+import hmac
+import hashlib
+import time
+
+def verify_webhook(payload: str, signature: str, secret: str) -> bool:
+    parts = dict(p.split('=') for p in signature.split(','))
+    timestamp = parts['t']
+    received_hash = parts['v1']
+    
+    # Check timestamp is recent
+    age = time.time() - int(timestamp)
+    if age > 300:
+        raise ValueError('Webhook timestamp too old')
+    
+    # Verify signature
+    expected = hmac.new(
+        secret.encode(),
+        f"{timestamp}.{payload}".encode(),
+        hashlib.sha256
+    ).hexdigest()
+    
+    if not hmac.compare_digest(received_hash, expected):
+        raise ValueError('Invalid webhook signature')
+    
+    return True
+```
+</CodeGroup>
+
+## Retry Logic
+
+If your endpoint doesn't respond with `2xx`:
+
+1. VoiceBook AI retries up to **5 times**
+2. Exponential backoff: 1s, 5s, 30s, 2m, 10m
+3. After 10 consecutive failures, webhook is auto-disabled
+
+### Best Practices
+
+1. **Respond quickly** — Return `200 OK` within 5 seconds
+2. **Process async** — Queue heavy processing for background
+3. **Be idempotent** — Handle duplicate deliveries gracefully
+4. **Monitor health** — Check webhook status in dashboard
+
+## Testing Webhooks
+
+### Send Test Event
+
+From the Dashboard:
+1. Go to **Developers → Webhooks**
+2. Click the webhook endpoint
+3. Click **Send Test**
+
+### Local Development
+
+Use a tunneling service like ngrok:
+
+```bash
+ngrok http 3000
+```
+
+Then use the ngrok URL as your webhook endpoint.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Webhook not receiving events">
+    - Verify the endpoint URL is correct and publicly accessible
+    - Check that the webhook status is "active"
+    - Ensure you've subscribed to the correct events
+    - Check your server logs for errors
+  </Accordion>
+  
+  <Accordion title="Invalid signature errors">
+    - Ensure you're using the correct signing secret
+    - Verify you're hashing the raw request body, not parsed JSON
+    - Check timestamp handling
+  </Accordion>
+  
+  <Accordion title="Webhook disabled after failures">
+    - Fix the issue causing failures
+    - Re-enable the webhook in the dashboard
+    - Consider implementing health checks
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+- [n8n Integration](/integrations/n8n) for webhook automation
+- [API Reference: Webhooks](/api-reference/webhooks/create)

@@ -1,0 +1,58 @@
+---
+title: 'Zapier Integration'
+description: 'Connect VoiceBook AI to 5,000+ apps with Zapier'
+icon: 'bolt'
+---
+
+<Info>
+  The Zapier integration is coming soon. Join our [waitlist](https://voicebook.ai/integrations/zapier) to get early access.
+</Info>
+
+## Overview
+
+Connect VoiceBook AI to thousands of apps using Zapier's no-code automation platform.
+
+## Planned Features
+
+<CardGroup cols={2}>
+  <Card title="Triggers" icon="play">
+    - Call completed
+    - Call started
+    - Voicemail received
+    - Agent created
+  </Card>
+  <Card title="Actions" icon="bolt">
+    - Initiate outbound call
+    - Create agent
+    - Update agent settings
+    - Get call transcript
+  </Card>
+</CardGroup>
+
+## Use Cases
+
+- **CRM Sync**: Automatically log calls to Salesforce, HubSpot, or Pipedrive
+- **Notifications**: Send Slack alerts when important calls complete
+- **Lead Follow-up**: Trigger email sequences after qualifying calls
+- **Data Entry**: Push call summaries to Google Sheets or Airtable
+
+## Get Notified
+
+<Card title="Join the Waitlist" icon="bell" href="https://voicebook.ai/integrations/zapier">
+  Be the first to know when our Zapier integration launches.
+</Card>
+
+## Alternative: Webhooks
+
+While waiting for native Zapier support, you can use [webhooks](/concepts/webhooks) with Zapier's webhook trigger to achieve similar functionality.
+
+```javascript
+// Zapier catches webhook from VoiceBook
+// POST to your Zapier webhook URL
+{
+  "event": "call.completed",
+  "call_id": "call_abc123",
+  "duration": 245,
+  "summary": "Customer inquired about pricing..."
+}
+```

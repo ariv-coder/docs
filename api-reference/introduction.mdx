@@ -1,33 +1,160 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: API Reference
+description: "Complete reference for the VoiceBook AI REST API"
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+# API Reference
 
-## Welcome
+Welcome to the VoiceBook AI API reference. This documentation covers all available endpoints for integrating VoiceBook AI into your applications.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+## Base URL
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+All API requests should be made to:
+
+```
+https://api.voicebook.ai/v1
+```
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+All requests require an API key in the `Authorization` header:
+
+```bash
+Authorization: Bearer vb_live_YOUR_API_KEY
+```
+
+See [Authentication](/authentication) for details on creating and managing API keys.
+
+## Request Format
+
+- All requests must include `Content-Type: application/json`
+- Request bodies should be JSON-encoded
+- All timestamps are in ISO 8601 format
+
+## Response Format
+
+All responses are JSON with the following structure:
+
+### Success Response
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
+{
+  "data": {
+    // Response data
+  },
+  "meta": {
+    "request_id": "req_abc123"
   }
-]
+}
 ```
+
+### Error Response
+
+```json
+{
+  "error": {
+    "code": "error_code",
+    "message": "Human-readable error message",
+    "details": {}
+  },
+  "meta": {
+    "request_id": "req_abc123"
+  }
+}
+```
+
+## HTTP Status Codes
+
+| Status | Description |
+|--------|-------------|
+| `200` | Success |
+| `201` | Created |
+| `400` | Bad Request - Invalid parameters |
+| `401` | Unauthorized - Invalid or missing API key |
+| `403` | Forbidden - Insufficient permissions |
+| `404` | Not Found - Resource doesn't exist |
+| `429` | Too Many Requests - Rate limit exceeded |
+| `500` | Internal Server Error |
+
+## Pagination
+
+List endpoints return paginated results:
+
+```json
+{
+  "data": [...],
+  "pagination": {
+    "total": 100,
+    "limit": 20,
+    "offset": 0,
+    "has_more": true
+  }
+}
+```
+
+Use `limit` and `offset` query parameters to paginate:
+
+```bash
+GET /v1/calls?limit=20&offset=40
+```
+
+## Rate Limits
+
+| Plan | Limit |
+|------|-------|
+| Pro | 300 requests/minute |
+| Agency | 1,000 requests/minute |
+
+Rate limit headers are included in every response:
+
+```
+X-RateLimit-Limit: 300
+X-RateLimit-Remaining: 295
+X-RateLimit-Reset: 1705312800
+```
+
+## Idempotency
+
+For POST requests, you can include an `Idempotency-Key` header to ensure the request is only processed once:
+
+```bash
+curl https://api.voicebook.ai/v1/calls \
+  -X POST \
+  -H "Authorization: Bearer vb_live_YOUR_API_KEY" \
+  -H "Idempotency-Key: unique-request-id-123" \
+  -H "Content-Type: application/json" \
+  -d '{"to": "+1234567890", "agent_id": "agent_xyz"}'
+```
+
+## Available Endpoints
+
+<CardGroup cols={2}>
+  <Card title="Calls" icon="phone" href="/api-reference/calls/create">
+    Initiate, list, and manage phone calls.
+  </Card>
+  <Card title="Agents" icon="robot" href="/api-reference/agents/list">
+    Create and configure voice agents.
+  </Card>
+  <Card title="Phone Numbers" icon="hashtag" href="/api-reference/phone-numbers/list">
+    Manage your phone numbers.
+  </Card>
+  <Card title="Webhooks" icon="webhook" href="/api-reference/webhooks/create">
+    Configure real-time event notifications.
+  </Card>
+</CardGroup>
+
+## SDKs & Libraries
+
+Official SDKs coming soon:
+
+- Node.js / TypeScript
+- Python
+- Go
+
+In the meantime, use any HTTP client with the REST API.
+
+## Need Help?
+
+- Browse the [Quick Start Guide](/quickstart)
+- Check [n8n Integration](/integrations/n8n) for automation
+- Join our [Discord](https://discord.gg/voicebook) for support

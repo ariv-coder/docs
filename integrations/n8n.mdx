@@ -1,0 +1,236 @@
+---
+title: n8n Integration
+description: "Connect VoiceBook AI to n8n for powerful workflow automation"
+---
+
+# n8n Integration
+
+n8n is a powerful workflow automation tool that lets you connect VoiceBook AI with hundreds of other apps and services. This guide shows you how to integrate VoiceBook AI with n8n using HTTP Request nodes.
+
+<Note>
+  No custom node installation required — n8n's built-in HTTP Request node works perfectly with VoiceBook AI's REST API.
+</Note>
+
+## Prerequisites
+
+- A VoiceBook AI account with Pro or Agency plan
+- An API key (from Dashboard → Developers)
+- n8n installed (self-hosted or cloud)
+
+## Setting Up Authentication
+
+First, create a reusable credential in n8n for VoiceBook AI:
+
+<Steps>
+  <Step title="Open Credentials">
+    In n8n, go to **Settings → Credentials → Add Credential**.
+  </Step>
+  <Step title="Select Header Auth">
+    Choose **Header Auth** as the credential type.
+  </Step>
+  <Step title="Configure the Header">
+    - **Name**: `Authorization`
+    - **Value**: `Bearer vb_live_YOUR_API_KEY`
+  </Step>
+  <Step title="Save">
+    Name it "VoiceBook AI" and save.
+  </Step>
+</Steps>
+
+## Basic Workflow: Make a Call
+
+Here's a simple workflow that makes an outbound call when triggered:
+
+### 1. Add an HTTP Request Node
+
+```json
+{
+  "name": "Make VoiceBook Call",
+  "type": "n8n-nodes-base.httpRequest",
+  "parameters": {
+    "method": "POST",
+    "url": "https://api.voicebook.ai/v1/calls",
+    "authentication": "predefinedCredentialType",
+    "nodeCredentialType": "httpHeaderAuth",
+    "sendHeaders": true,
+    "headerParameters": {
+      "parameters": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    "sendBody": true,
+    "bodyParameters": {
+      "parameters": [
+        {
+          "name": "to",
+          "value": "={{ $json.phone }}"
+        },
+        {
+          "name": "agent_id",
+          "value": "your_agent_id"
+        },
+        {
+          "name": "context",
+          "value": "={{ JSON.stringify({ customer_name: $json.name }) }}"
+        }
+      ]
+    }
+  }
+}
+```
+
+### Visual Setup
+
+1. Add an **HTTP Request** node
+2. Set **Method** to `POST`
+3. Set **URL** to `https://api.voicebook.ai/v1/calls`
+4. Under **Authentication**, select your VoiceBook AI credential
+5. Enable **Send Body** and add:
+   - `to`: The phone number to call
+   - `agent_id`: Your voice agent ID
+   - `context`: Any context data for the agent
+
+## Example Workflows
+
+### Lead Qualification from Google Forms
+
+Trigger an AI call when someone submits a form:
+
+```
+[Google Forms Trigger] → [HTTP Request: Make Call] → [Set Status in Sheet]
+```
+
+**Flow:**
+1. **Google Forms Trigger** — Watches for new submissions
+2. **HTTP Request** — Calls the lead using VoiceBook AI
+3. **Google Sheets** — Updates submission status
+
+### Appointment Reminder Calls
+
+Send reminder calls 24 hours before appointments:
+
+```
+[Schedule Trigger] → [Get Tomorrow's Appointments] → [Loop] → [Make Reminder Call]
+```
+
+**Flow:**
+1. **Schedule Trigger** — Runs daily at 9 AM
+2. **HTTP Request** — Fetches appointments from your calendar/CRM
+3. **Loop** — Iterates through appointments
+4. **HTTP Request** — Makes reminder calls via VoiceBook AI
+
+### Call Results to CRM
+
+Update your CRM when calls complete:
+
+```
+[Webhook Trigger] → [IF Call Completed] → [Update HubSpot Contact]
+```
+
+**Flow:**
+1. **Webhook** — Receives VoiceBook AI webhook events
+2. **IF** — Checks if event is `call.completed`
+3. **HubSpot** — Updates contact with call outcome
+
+## Receiving Webhooks
+
+To receive webhook events from VoiceBook AI in n8n:
+
+<Steps>
+  <Step title="Create a Webhook Node">
+    Add a **Webhook** node to your workflow and set it to **POST**.
+  </Step>
+  <Step title="Copy the Webhook URL">
+    n8n will generate a URL like `https://your-n8n.com/webhook/abc123`.
+  </Step>
+  <Step title="Register in VoiceBook AI">
+    Use the API or Dashboard to create a webhook pointing to your n8n URL:
+    
+    ```bash
+    curl https://api.voicebook.ai/v1/webhooks \
+      -X POST \
+      -H "Authorization: Bearer vb_live_YOUR_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "url": "https://your-n8n.com/webhook/abc123",
+        "events": ["call.completed", "call.failed", "appointment.created"]
+      }'
+    ```
+  </Step>
+</Steps>
+
+### Webhook Payload Example
+
+When a call completes, your n8n workflow receives:
+
+```json
+{
+  "event": "call.completed",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "data": {
+    "call_id": "call_abc123",
+    "agent_id": "agent_xyz",
+    "phone_number": "+1234567890",
+    "duration_seconds": 145,
+    "outcome": "appointment_booked",
+    "transcript": "Agent: Hello! Thanks for calling...",
+    "extracted_data": {
+      "appointment_date": "2024-01-20",
+      "appointment_time": "14:00",
+      "customer_name": "John Smith"
+    }
+  }
+}
+```
+
+## Workflow Templates
+
+Download ready-to-import n8n workflow templates:
+
+<CardGroup cols={2}>
+  <Card title="Lead Qualifier" icon="filter" href="https://voicebook.ai/templates/n8n-lead-qualifier.json">
+    Automatically qualify leads with AI calls.
+  </Card>
+  <Card title="Appointment Reminder" icon="calendar" href="https://voicebook.ai/templates/n8n-appointment-reminder.json">
+    Send reminder calls before appointments.
+  </Card>
+  <Card title="Follow-up Sequence" icon="repeat" href="https://voicebook.ai/templates/n8n-followup-sequence.json">
+    Multi-touch follow-up automation.
+  </Card>
+  <Card title="CRM Sync" icon="sync" href="https://voicebook.ai/templates/n8n-crm-sync.json">
+    Sync call results to your CRM.
+  </Card>
+</CardGroup>
+
+## Tips & Best Practices
+
+<AccordionGroup>
+  <Accordion title="Handle Rate Limits">
+    Add delays between API calls if processing many items:
+    
+    ```
+    [Loop] → [HTTP Request] → [Wait 200ms] → [Next]
+    ```
+  </Accordion>
+  
+  <Accordion title="Error Handling">
+    Always add error handling nodes after HTTP requests to catch and log failures.
+  </Accordion>
+  
+  <Accordion title="Use Variables">
+    Store your `agent_id` in n8n variables for easy reuse across workflows.
+  </Accordion>
+  
+  <Accordion title="Test with Test Mode">
+    Use VoiceBook AI's test mode (prepend calls with `test_`) during development.
+  </Accordion>
+</AccordionGroup>
+
+## Need Help?
+
+- Check the [API Reference](/api-reference/introduction)
+- Join our [Discord](https://discord.gg/voicebook)
+- See the [n8n documentation](https://docs.n8n.io/)

@@ -1,0 +1,143 @@
+---
+title: 'Get Phone Number'
+api: 'GET https://api.voicebook.ai/v1/phone-numbers/{phone_number_id}'
+description: 'Retrieve details of a specific phone number'
+---
+
+## Request
+
+Retrieve detailed information about a specific phone number.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token for authentication. Format: `Bearer YOUR_API_KEY`
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="phone_number_id" type="string" required>
+  The unique identifier of the phone number (e.g., `pn_abc123`)
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="include" type="string">
+  Comma-separated list of additional data: `stats`, `recent_calls`
+</ParamField>
+
+## Response
+
+<ResponseField name="id" type="string">
+  Unique identifier for the phone number
+</ResponseField>
+
+<ResponseField name="phone_number" type="string">
+  The phone number in E.164 format
+</ResponseField>
+
+<ResponseField name="friendly_name" type="string">
+  Display name for the phone number
+</ResponseField>
+
+<ResponseField name="country" type="string">
+  Two-letter country code
+</ResponseField>
+
+<ResponseField name="region" type="string">
+  State or region code
+</ResponseField>
+
+<ResponseField name="capabilities" type="object">
+  Object with `voice` and `sms` boolean fields
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Current status: `active`, `pending`, `inactive`
+</ResponseField>
+
+<ResponseField name="default_agent_id" type="string">
+  Agent ID for handling incoming calls
+</ResponseField>
+
+<ResponseField name="stats" type="object">
+  Usage statistics (when `include=stats`)
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  ISO 8601 creation timestamp
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl https://api.voicebook.ai/v1/phone-numbers/pn_abc123?include=stats \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```javascript Node.js
+const response = await fetch(
+  'https://api.voicebook.ai/v1/phone-numbers/pn_abc123?include=stats',
+  {
+    headers: {
+      'Authorization': 'Bearer YOUR_API_KEY',
+    },
+  }
+);
+
+const phoneNumber = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.voicebook.ai/v1/phone-numbers/pn_abc123',
+    headers={'Authorization': 'Bearer YOUR_API_KEY'},
+    params={'include': 'stats'}
+)
+
+phone_number = response.json()
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 - Success
+{
+  "id": "pn_abc123",
+  "phone_number": "+18005551234",
+  "friendly_name": "Main Business Line",
+  "country": "US",
+  "region": "CA",
+  "capabilities": {
+    "voice": true,
+    "sms": true
+  },
+  "status": "active",
+  "default_agent_id": "agent_abc123",
+  "stats": {
+    "total_calls": 5420,
+    "total_minutes": 18500,
+    "calls_this_month": 342,
+    "minutes_this_month": 1156
+  },
+  "created_at": "2024-01-10T08:00:00Z",
+  "updated_at": "2024-01-15T12:30:00Z"
+}
+```
+
+```json 404 - Not Found
+{
+  "error": {
+    "code": "phone_number_not_found",
+    "message": "The specified phone number does not exist"
+  }
+}
+```
+</ResponseExample>
+
+## Error Codes
+
+| Code | Description |
+|------|-------------|
+| `phone_number_not_found` | The specified ID does not exist |
+| `unauthorized` | You don't have access to this phone number |

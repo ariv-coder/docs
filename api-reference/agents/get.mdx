@@ -1,0 +1,149 @@
+---
+title: 'Get Agent'
+api: 'GET https://api.voicebook.ai/v1/agents/{agent_id}'
+description: 'Retrieve details of a specific agent'
+---
+
+## Request
+
+Retrieve detailed information about a specific AI voice agent.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token for authentication. Format: `Bearer YOUR_API_KEY`
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent (e.g., `agent_abc123`)
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="include" type="string">
+  Comma-separated list of additional data: `stats`, `recent_calls`
+</ParamField>
+
+## Response
+
+<ResponseField name="id" type="string">
+  Unique identifier for the agent
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  The agent's display name
+</ResponseField>
+
+<ResponseField name="system_prompt" type="string">
+  The agent's instruction prompt
+</ResponseField>
+
+<ResponseField name="voice_id" type="string">
+  The voice ID used by the agent
+</ResponseField>
+
+<ResponseField name="first_message" type="string">
+  The agent's greeting message
+</ResponseField>
+
+<ResponseField name="language" type="string">
+  Primary language code
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  The LLM powering the agent
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Agent status: `active` or `inactive`
+</ResponseField>
+
+<ResponseField name="stats" type="object">
+  Usage statistics (when `include=stats`)
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  ISO 8601 creation timestamp
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  ISO 8601 last update timestamp
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl https://api.voicebook.ai/v1/agents/agent_abc123?include=stats \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```javascript Node.js
+const response = await fetch(
+  'https://api.voicebook.ai/v1/agents/agent_abc123?include=stats',
+  {
+    headers: {
+      'Authorization': 'Bearer YOUR_API_KEY',
+    },
+  }
+);
+
+const agent = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.voicebook.ai/v1/agents/agent_abc123',
+    headers={'Authorization': 'Bearer YOUR_API_KEY'},
+    params={'include': 'stats'}
+)
+
+agent = response.json()
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 - Success
+{
+  "id": "agent_abc123",
+  "name": "Sales Assistant",
+  "system_prompt": "You are Sarah, a friendly sales assistant for Acme Corp...",
+  "voice_id": "sarah-professional",
+  "first_message": "Hi! This is Sarah from Acme Corp...",
+  "language": "en-US",
+  "model": "gpt-4o",
+  "temperature": 0.7,
+  "max_tokens": 150,
+  "interruption_threshold": 0.5,
+  "end_call_phrases": ["goodbye", "that's all"],
+  "status": "active",
+  "stats": {
+    "total_calls": 1250,
+    "total_duration_minutes": 4580,
+    "avg_call_duration_seconds": 220,
+    "success_rate": 0.85
+  },
+  "metadata": {},
+  "created_at": "2024-01-15T10:30:00Z",
+  "updated_at": "2024-01-18T14:22:00Z"
+}
+```
+
+```json 404 - Not Found
+{
+  "error": {
+    "code": "agent_not_found",
+    "message": "The specified agent does not exist"
+  }
+}
+```
+</ResponseExample>
+
+## Error Codes
+
+| Code | Description |
+|------|-------------|
+| `agent_not_found` | The specified agent_id does not exist |
+| `unauthorized` | You don't have access to this agent |

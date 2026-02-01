@@ -1,0 +1,174 @@
+---
+title: 'List Calls'
+api: 'GET https://api.voicebook.ai/v1/calls'
+description: 'List all calls with filtering and pagination'
+---
+
+## Request
+
+Retrieve a paginated list of calls for your account with optional filtering.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token for authentication. Format: `Bearer YOUR_API_KEY`
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="limit" type="integer" default="20">
+  Number of calls to return (1-100)
+</ParamField>
+
+<ParamField query="cursor" type="string">
+  Pagination cursor from a previous response
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter by status: `queued`, `ringing`, `in_progress`, `completed`, `failed`, `no_answer`, `busy`
+</ParamField>
+
+<ParamField query="agent_id" type="string">
+  Filter by agent ID
+</ParamField>
+
+<ParamField query="phone_number" type="string">
+  Filter by destination phone number
+</ParamField>
+
+<ParamField query="from_date" type="string">
+  Filter calls created after this ISO 8601 date
+</ParamField>
+
+<ParamField query="to_date" type="string">
+  Filter calls created before this ISO 8601 date
+</ParamField>
+
+<ParamField query="order" type="string" default="desc">
+  Sort order: `asc` or `desc` (by created_at)
+</ParamField>
+
+## Response
+
+<ResponseField name="data" type="array">
+  Array of call objects
+</ResponseField>
+
+<ResponseField name="has_more" type="boolean">
+  Whether there are more results available
+</ResponseField>
+
+<ResponseField name="next_cursor" type="string">
+  Cursor to use for fetching the next page
+</ResponseField>
+
+<ResponseField name="total" type="integer">
+  Total number of calls matching the filter
+</ResponseField>
+
+<RequestExample>
+```bash cURL
+curl "https://api.voicebook.ai/v1/calls?limit=10&status=completed" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```javascript Node.js
+const params = new URLSearchParams({
+  limit: '10',
+  status: 'completed',
+});
+
+const response = await fetch(
+  `https://api.voicebook.ai/v1/calls?${params}`,
+  {
+    headers: {
+      'Authorization': 'Bearer YOUR_API_KEY',
+    },
+  }
+);
+
+const { data, has_more, next_cursor } = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.voicebook.ai/v1/calls',
+    headers={'Authorization': 'Bearer YOUR_API_KEY'},
+    params={
+        'limit': 10,
+        'status': 'completed'
+    }
+)
+
+data = response.json()
+calls = data['data']
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 - Success
+{
+  "data": [
+    {
+      "id": "call_xyz789",
+      "status": "completed",
+      "phone_number": "+14155551234",
+      "from_number": "+18005551234",
+      "agent_id": "agent_abc123",
+      "duration": 245,
+      "metadata": {
+        "customer_id": "cust_456"
+      },
+      "created_at": "2024-01-15T10:30:00Z",
+      "ended_at": "2024-01-15T10:34:05Z"
+    },
+    {
+      "id": "call_abc456",
+      "status": "completed",
+      "phone_number": "+14155559876",
+      "from_number": "+18005551234",
+      "agent_id": "agent_abc123",
+      "duration": 180,
+      "metadata": {},
+      "created_at": "2024-01-15T09:15:00Z",
+      "ended_at": "2024-01-15T09:18:00Z"
+    }
+  ],
+  "has_more": true,
+  "next_cursor": "eyJjcmVhdGVkX2F0IjoiMjAyNC0wMS0xNVQwOToxNTowMFoifQ==",
+  "total": 156
+}
+```
+</ResponseExample>
+
+## Pagination
+
+Use cursor-based pagination for efficient traversal of large result sets:
+
+```javascript
+let cursor = null;
+let allCalls = [];
+
+do {
+  const params = new URLSearchParams({ limit: '100' });
+  if (cursor) params.set('cursor', cursor);
+
+  const response = await fetch(
+    `https://api.voicebook.ai/v1/calls?${params}`,
+    { headers: { 'Authorization': 'Bearer YOUR_API_KEY' } }
+  );
+
+  const { data, has_more, next_cursor } = await response.json();
+  allCalls = allCalls.concat(data);
+  cursor = has_more ? next_cursor : null;
+} while (cursor);
+```
+
+## Error Codes
+
+| Code | Description |
+|------|-------------|
+| `invalid_cursor` | The pagination cursor is invalid or expired |
+| `invalid_date_format` | Date parameters must be ISO 8601 format |

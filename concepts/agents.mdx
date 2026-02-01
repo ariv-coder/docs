@@ -1,0 +1,222 @@
+---
+title: Voice Agents
+description: "Understanding and configuring AI voice agents"
+---
+
+# Voice Agents
+
+Voice agents are the AI-powered assistants that handle your phone calls. Each agent has its own voice, personality, and capabilities.
+
+## What is a Voice Agent?
+
+A voice agent is an AI that can:
+
+- **Speak** in a natural, human-like voice
+- **Listen** and understand what callers say
+- **Respond** intelligently based on context
+- **Take actions** like booking appointments or transferring calls
+- **Learn** from your knowledge base to answer questions
+
+## Creating an Agent
+
+You can create agents via the Dashboard or API:
+
+### Via Dashboard
+
+1. Go to **Dashboard → Voice Agents**
+2. Click **Create Agent**
+3. Configure voice, personality, and capabilities
+4. Click **Create**
+
+### Via API
+
+```bash
+curl https://api.voicebook.ai/v1/agents \
+  -X POST \
+  -H "Authorization: Bearer vb_live_YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Sarah - Receptionist",
+    "voice_id": "sarah",
+    "personality": "friendly, professional, helpful",
+    "greeting": "Hello! Thanks for calling. How can I help you today?",
+    "language": "en-US"
+  }'
+```
+
+## Configuration Options
+
+### Voice
+
+Choose from multiple voices:
+
+| Voice ID | Name | Description |
+|----------|------|-------------|
+| `sarah` | Sarah | Warm, professional female |
+| `james` | James | Confident male voice |
+| `emma` | Emma | Friendly, upbeat female |
+| `michael` | Michael | Deep, authoritative male |
+| `aria` | Aria | Youthful, energetic female |
+
+### Personality
+
+Describe how your agent should behave:
+
+```json
+{
+  "personality": "friendly and professional, speaks clearly, uses the caller's name, stays on topic"
+}
+```
+
+**Tips:**
+- Be specific about tone (formal, casual, friendly)
+- Define boundaries (what NOT to discuss)
+- Include industry-specific instructions
+
+### Greeting
+
+The first thing your agent says:
+
+```json
+{
+  "greeting": "Hello! Thanks for calling Acme Dental. This is Sarah speaking. How can I help you today?"
+}
+```
+
+### Fallback Message
+
+When the agent can't understand or help:
+
+```json
+{
+  "fallback_message": "I apologize, I didn't quite catch that. Could you please repeat that?"
+}
+```
+
+### Transfer Settings
+
+Configure when and how to transfer to humans:
+
+```json
+{
+  "transfer_enabled": true,
+  "transfer_number": "+1234567890",
+  "transfer_triggers": ["speak to human", "talk to someone", "representative"]
+}
+```
+
+## Advanced Configuration
+
+### Voice Settings
+
+Fine-tune the voice output:
+
+```json
+{
+  "voice_settings": {
+    "stability": 0.7,
+    "similarity_boost": 0.8,
+    "style": 0.5,
+    "use_speaker_boost": true
+  }
+}
+```
+
+| Setting | Description | Range |
+|---------|-------------|-------|
+| `stability` | Voice consistency (higher = more stable) | 0-1 |
+| `similarity_boost` | How close to original voice | 0-1 |
+| `style` | Expressiveness level | 0-1 |
+
+### Language
+
+Set the agent's language:
+
+```json
+{
+  "language": "en-US",
+  "auto_detect_language": false
+}
+```
+
+Supported languages:
+- `en-US` - English (US)
+- `en-GB` - English (UK)
+- `es-ES` - Spanish (Spain)
+- `es-MX` - Spanish (Mexico)
+- `fr-FR` - French
+- `de-DE` - German
+- More coming soon!
+
+### Call Duration
+
+Set maximum call length:
+
+```json
+{
+  "max_call_duration": 600
+}
+```
+
+## Knowledge Base
+
+Connect your knowledge base to give the agent information:
+
+1. Go to **Dashboard → Knowledge Base**
+2. Add FAQs, service info, policies
+3. The agent will use this to answer questions
+
+Example knowledge base entries:
+
+```json
+[
+  {
+    "type": "faq",
+    "question": "What are your hours?",
+    "answer": "We're open Monday through Friday, 9 AM to 5 PM."
+  },
+  {
+    "type": "service",
+    "content": "Our dental cleaning service costs $150 and takes about 45 minutes."
+  }
+]
+```
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Keep greetings short">
+    Long greetings frustrate callers. Get to the point quickly.
+    
+    ✅ "Hello, this is Sarah from Acme Dental. How can I help?"
+    
+    ❌ "Hello and welcome to Acme Dental, the premier dental care provider in the greater metropolitan area since 1985..."
+  </Accordion>
+  
+  <Accordion title="Test your agent">
+    Use the test call feature in the dashboard to refine your agent before going live.
+  </Accordion>
+  
+  <Accordion title="Build a comprehensive knowledge base">
+    The more information your agent has, the better it can help callers.
+  </Accordion>
+  
+  <Accordion title="Set up human transfer">
+    Always have a way for callers to reach a human for complex issues.
+  </Accordion>
+</AccordionGroup>
+
+## Status: Draft vs Published
+
+Agents have two states:
+
+- **Draft**: Can be tested but won't receive real calls
+- **Published**: Live and receiving calls
+
+Only publish an agent when you're confident it's ready.
+
+## Next Steps
+
+- [Make your first call](/quickstart)
+- [Set up webhooks](/concepts/webhooks)
+- [API Reference: Agents](/api-reference/agents/list)

@@ -1,0 +1,220 @@
+---
+title: Calls
+description: "Making and managing AI phone calls"
+---
+
+# Calls
+
+VoiceBook AI can handle both inbound and outbound phone calls. This guide covers how calls work and how to manage them.
+
+## Call Types
+
+### Inbound Calls
+
+When someone calls your VoiceBook AI phone number:
+
+1. Call is answered by your voice agent
+2. Agent greets the caller
+3. Conversation happens naturally
+4. Agent can book appointments, answer questions, or transfer
+5. Call ends and you receive a webhook with details
+
+### Outbound Calls
+
+Make calls programmatically via API:
+
+```bash
+curl https://api.voicebook.ai/v1/calls \
+  -X POST \
+  -H "Authorization: Bearer vb_live_YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "to": "+1234567890",
+    "agent_id": "agent_xyz",
+    "context": {
+      "customer_name": "John Smith",
+      "purpose": "appointment_reminder",
+      "appointment_date": "January 20th at 2 PM"
+    }
+  }'
+```
+
+## Call Context
+
+Pass context to personalize the conversation:
+
+```json
+{
+  "context": {
+    "customer_name": "John Smith",
+    "customer_type": "returning",
+    "last_visit": "December 15th",
+    "purpose": "follow_up",
+    "notes": "Interested in teeth whitening"
+  }
+}
+```
+
+Your agent can use this context naturally:
+
+> "Hello John! I'm following up on your visit in December. I remember you were interested in our teeth whitening services..."
+
+## Call Lifecycle
+
+```
+initiated → ringing → answered → in_progress → completed
+                                             → transferred
+                         → no_answer
+                         → busy
+                         → failed
+```
+
+### States
+
+| State | Description |
+|-------|-------------|
+| `initiated` | Call started, dialing |
+| `ringing` | Phone is ringing |
+| `answered` | Call connected |
+| `in_progress` | Conversation happening |
+| `completed` | Call ended normally |
+| `transferred` | Transferred to human |
+| `no_answer` | No answer after timeout |
+| `busy` | Line busy |
+| `failed` | Technical failure |
+
+## Call Results
+
+After a call ends, you get detailed results:
+
+```json
+{
+  "call_id": "call_abc123",
+  "status": "completed",
+  "duration_seconds": 145,
+  "outcome": "appointment_booked",
+  "transcript": "Agent: Hello! Thanks for calling...\nCustomer: Hi, I'd like to book...",
+  "recording_url": "https://...",
+  "extracted_data": {
+    "appointment_date": "2024-01-20",
+    "appointment_time": "14:00",
+    "service": "dental_cleaning"
+  },
+  "sentiment": {
+    "overall": "positive",
+    "score": 0.85
+  }
+}
+```
+
+### Outcomes
+
+Common call outcomes:
+
+| Outcome | Description |
+|---------|-------------|
+| `appointment_booked` | Successfully booked appointment |
+| `information_provided` | Answered caller's questions |
+| `callback_requested` | Caller wants a callback |
+| `transferred` | Transferred to human |
+| `voicemail_left` | Left voicemail |
+| `no_action` | Call ended without action |
+
+## Transcripts
+
+Every call generates a transcript:
+
+```
+[00:00] Agent: Hello! Thanks for calling Acme Dental. This is Sarah. How can I help you today?
+
+[00:05] Customer: Hi Sarah, I'd like to schedule a cleaning appointment.
+
+[00:08] Agent: I'd be happy to help you schedule that! What day works best for you?
+
+[00:12] Customer: Do you have anything available next Tuesday afternoon?
+
+[00:15] Agent: Let me check... Yes! I have 2 PM and 3:30 PM available next Tuesday. Which would you prefer?
+```
+
+## Recordings
+
+Calls are recorded by default (can be disabled). Access recordings:
+
+```bash
+curl https://api.voicebook.ai/v1/calls/call_abc123 \
+  -H "Authorization: Bearer vb_live_YOUR_API_KEY"
+```
+
+Response includes `recording_url` for the audio file.
+
+<Warning>
+  Ensure you comply with call recording laws in your jurisdiction. Some regions require two-party consent.
+</Warning>
+
+## Bulk Calls (Campaigns)
+
+Make multiple calls with a campaign:
+
+```bash
+curl https://api.voicebook.ai/v1/campaigns \
+  -X POST \
+  -H "Authorization: Bearer vb_live_YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Appointment Reminders",
+    "agent_id": "agent_xyz",
+    "contacts": [
+      {"phone": "+1234567890", "context": {"name": "John", "appointment": "Monday 2pm"}},
+      {"phone": "+0987654321", "context": {"name": "Jane", "appointment": "Monday 3pm"}}
+    ],
+    "settings": {
+      "max_concurrent": 5,
+      "retry_no_answer": true,
+      "schedule": "2024-01-15T09:00:00Z"
+    }
+  }'
+```
+
+## Handling Transfer
+
+When a caller asks to speak to a human:
+
+1. Agent acknowledges the request
+2. Plays hold music/message
+3. Dials your transfer number
+4. Connects caller to human
+5. Webhook sent with `transferred` status
+
+Configure transfer settings:
+
+```json
+{
+  "transfer_enabled": true,
+  "transfer_number": "+1234567890",
+  "transfer_message": "One moment while I connect you with a team member."
+}
+```
+
+## Pricing
+
+Calls are billed based on duration:
+
+- Outbound calls: Charged per minute connected
+- Inbound calls: Charged per minute connected
+- Credits deducted from your balance
+
+Check your usage in **Dashboard → Billing**.
+
+## Best Practices
+
+1. **Test before bulk calling** — Make test calls to verify agent behavior
+2. **Respect calling hours** — Don't call late at night or early morning
+3. **Include context** — Personalized calls are more effective
+4. **Handle failures** — Set up retry logic for no-answers
+5. **Monitor outcomes** — Use webhooks to track results
+
+## Next Steps
+
+- [Set up webhooks](/concepts/webhooks) for real-time updates
+- [n8n Integration](/integrations/n8n) for automation
+- [API Reference: Calls](/api-reference/calls/create)
