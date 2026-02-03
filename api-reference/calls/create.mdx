@@ -1,8 +1,12 @@
 ---
 title: 'Create Call'
-api: 'POST https://api.ringyo.ai/v1/calls'
+api: 'POST https://www.ringyo.ai/api/v1/calls'
 description: 'Initiate a new outbound phone call'
 ---
+
+<Warning>
+  **Coming Soon** — This endpoint currently returns `501 Not Implemented`. Calls management via API is under active development. For now, use the [Dashboard](https://www.ringyo.ai/dashboard) to manage calls. Agent, webhook, and other endpoints are fully functional.
+</Warning>
 
 ## Request
 
@@ -72,7 +76,7 @@ Initiate an outbound call to a phone number using a specified agent.
 
 <RequestExample>
 ```bash cURL
-curl -X POST https://api.ringyo.ai/v1/calls \
+curl -X POST https://www.ringyo.ai/api/v1/calls \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -86,7 +90,7 @@ curl -X POST https://api.ringyo.ai/v1/calls \
 ```
 
 ```javascript Node.js
-const response = await fetch('https://api.ringyo.ai/v1/calls', {
+const response = await fetch('https://www.ringyo.ai/api/v1/calls', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',
@@ -109,7 +113,7 @@ const call = await response.json();
 import requests
 
 response = requests.post(
-    'https://api.ringyo.ai/v1/calls',
+    'https://www.ringyo.ai/api/v1/calls',
     headers={
         'Authorization': 'Bearer YOUR_API_KEY',
         'Content-Type': 'application/json',

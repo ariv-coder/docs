@@ -49,7 +49,7 @@ Here's a simple workflow that makes an outbound call when triggered:
   "type": "n8n-nodes-base.httpRequest",
   "parameters": {
     "method": "POST",
-    "url": "https://api.ringyo.ai/v1/calls",
+    "url": "https://www.ringyo.ai/api/v1/calls",
     "authentication": "predefinedCredentialType",
     "nodeCredentialType": "httpHeaderAuth",
     "sendHeaders": true,
@@ -86,7 +86,7 @@ Here's a simple workflow that makes an outbound call when triggered:
 
 1. Add an **HTTP Request** node
 2. Set **Method** to `POST`
-3. Set **URL** to `https://api.ringyo.ai/v1/calls`
+3. Set **URL** to `https://www.ringyo.ai/api/v1/calls`
 4. Under **Authentication**, select your Ringyo AI credential
 5. Enable **Send Body** and add:
    - `to`: The phone number to call
@@ -150,7 +150,7 @@ To receive webhook events from Ringyo AI in n8n:
     Use the API or Dashboard to create a webhook pointing to your n8n URL:
     
     ```bash
-    curl https://api.ringyo.ai/v1/webhooks \
+    curl https://www.ringyo.ai/api/v1/webhooks \
       -X POST \
       -H "Authorization: Bearer vb_live_YOUR_API_KEY" \
       -H "Content-Type: application/json" \
@@ -191,16 +191,16 @@ When a call completes, your n8n workflow receives:
 Download ready-to-import n8n workflow templates:
 
 <CardGroup cols={2}>
-  <Card title="Lead Qualifier" icon="filter" href="https://ringyo.ai/templates/n8n-lead-qualifier.json">
+  <Card title="Lead Qualifier" icon="filter" href="https://www.ringyo.ai/templates/n8n-lead-qualifier.json">
     Automatically qualify leads with AI calls.
   </Card>
-  <Card title="Appointment Reminder" icon="calendar" href="https://ringyo.ai/templates/n8n-appointment-reminder.json">
+  <Card title="Appointment Reminder" icon="calendar" href="https://www.ringyo.ai/templates/n8n-appointment-reminder.json">
     Send reminder calls before appointments.
   </Card>
-  <Card title="Follow-up Sequence" icon="repeat" href="https://ringyo.ai/templates/n8n-followup-sequence.json">
+  <Card title="Follow-up Sequence" icon="repeat" href="https://www.ringyo.ai/templates/n8n-followup-sequence.json">
     Multi-touch follow-up automation.
   </Card>
-  <Card title="CRM Sync" icon="sync" href="https://ringyo.ai/templates/n8n-crm-sync.json">
+  <Card title="CRM Sync" icon="sync" href="https://www.ringyo.ai/templates/n8n-crm-sync.json">
     Sync call results to your CRM.
   </Card>
 </CardGroup>
@@ -232,5 +232,5 @@ Download ready-to-import n8n workflow templates:
 ## Need Help?
 
 - Check the [API Reference](/api-reference/introduction)
-- Join our [Discord](https://ringyo.ai/contact)
+- Join our [Discord](https://discord.gg/ringyo)
 - See the [n8n documentation](https://docs.n8n.io/)

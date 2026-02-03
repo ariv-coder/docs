@@ -29,20 +29,18 @@ API keys let you interact with the Ringyo AI API programmatically. Available on 
 API keys follow this format:
 
 ```
-rg_live_aBcDeFgHiJkLmNoPqRsT...
-rg_test_aBcDeFgHiJkLmNoPqRsT...
+vb_live_aBcDeFgHiJkLmNoPqRsT...
 ```
 
-- `rg_live_` — production keys that make real calls and consume credits
-- `rg_test_` — test keys for development (no real calls, no credit usage)
+- `vb_live_` — production keys that make real calls and consume credits
 
 ## Using Your API Key
 
 Include the key in the `Authorization` header:
 
 ```bash
-curl https://api.ringyo.ai/v1/agents \
-  -H "Authorization: Bearer rg_live_YOUR_API_KEY"
+curl https://www.ringyo.ai/api/v1/agents \
+  -H "Authorization: Bearer vb_live_YOUR_API_KEY"
 ```
 
 See the [API Reference](/api-reference/introduction) for full documentation.
@@ -74,8 +72,8 @@ From **Dashboard → Developers → API Keys**, you can:
 
 | Plan | Rate Limit |
 |------|-----------|
-| Pro | 60 requests/minute |
-| Agency | 300 requests/minute |
+| Pro | 300 requests/minute |
+| Agency | 1,000 requests/minute |
 
 Exceeding the limit returns `429 Too Many Requests`. Implement exponential backoff in your integration.
 

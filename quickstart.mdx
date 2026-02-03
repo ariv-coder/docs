@@ -1,28 +1,98 @@
 ---
 title: Quick Start
-description: "Make your first AI phone call in 5 minutes"
+description: "Get your AI voice agent live in 5 minutes"
 ---
 
 # Quick Start Guide
 
-This guide will walk you through making your first AI-powered phone call with Ringyo AI.
+This guide walks you through setting up your first AI voice agent on Ringyo AI — from sign-up to a live agent handling calls.
 
 ## Prerequisites
 
 Before you begin, you'll need:
 
-- A Ringyo account ([Sign up](https://ringyo.vercel.app/sign-up))
-- A Pro or Agency plan for API access
-- Your API key (available in Dashboard → Developers)
+- A Ringyo account ([Sign up](https://www.ringyo.ai/sign-up))
+- A few minutes to configure your agent
 
-## Step 1: Get Your API Key
+<Info>
+  Every new account gets a **14-day free trial** with 500 credits — no credit card required.
+</Info>
+
+## Step 1: Create Your Business
+
+<Steps>
+  <Step title="Log in to your Dashboard">
+    Go to your [Dashboard](https://www.ringyo.ai/dashboard) and complete the onboarding flow.
+  </Step>
+  <Step title="Set up your business profile">
+    Navigate to **Settings → Business** and fill in your business name, category, contact info, and working hours. Your AI agent uses this info to answer caller questions accurately.
+  </Step>
+</Steps>
+
+## Step 2: Create a Voice Agent
+
+<Steps>
+  <Step title="Open Agents">
+    Go to **Dashboard → Agents** and click **Create Agent**.
+  </Step>
+  <Step title="Configure your agent">
+    - **Name**: Give it a descriptive name (e.g., "Front Desk Agent")
+    - **Voice**: Choose from available voices and preview them
+    - **Greeting**: Write the first thing your agent says (e.g., "Hello! Thanks for calling. How can I help you today?")
+    - **Instructions**: Tell the agent how to behave, what services to offer, and when to transfer to a human
+  </Step>
+  <Step title="Save and activate">
+    Click **Save**, then toggle the agent to **Active**.
+  </Step>
+</Steps>
+
+## Step 3: Train Your Agent
+
+<Steps>
+  <Step title="Open Knowledge Base">
+    Go to **Dashboard → Knowledge Base** and click **Add Entry**.
+  </Step>
+  <Step title="Add FAQs and service info">
+    Add entries your agent should know — business hours, services, pricing, policies, directions, etc. The more you add, the better your agent handles questions.
+  </Step>
+</Steps>
+
+## Step 4: Connect a Phone Number
+
+<Steps>
+  <Step title="Go to Phone Numbers">
+    Navigate to **Dashboard → Phone Numbers** and click **Add Number**.
+  </Step>
+  <Step title="Buy or connect a number">
+    Purchase a new number through Ringyo or connect an existing Twilio number.
+  </Step>
+  <Step title="Assign to your agent">
+    Select your voice agent to handle calls on this number.
+  </Step>
+</Steps>
+
+<Check>
+  Your AI agent is now live! Calls to your number will be answered by your voice agent.
+</Check>
+
+## Step 5: Test Your Agent
+
+Click **Test Call** on the agent page — Ringyo will call your phone so you can interact with your agent and fine-tune its behavior.
+
+---
+
+## Using the API (Optional)
+
+For developers who want to integrate programmatically, Ringyo provides a REST API. You'll need a **Pro or Agency plan** for API access.
+
+### Get Your API Key
 
 <Steps>
   <Step title="Open the Developer Section">
-    Navigate to your [Dashboard](https://ringyo.vercel.app/dashboard) and click on **Developers** in the sidebar.
+    Navigate to your [Dashboard](https://www.ringyo.ai/dashboard) and click on **Developers** in the sidebar.
   </Step>
   <Step title="Create an API Key">
-    Click **Create Key**, give it a name (e.g., "My First Key"), select the permissions you need, and click **Create**.
+    Click **Create Key**, give it a name, select permissions, and click **Create**.
   </Step>
   <Step title="Copy Your Key">
     <Warning>
@@ -32,13 +102,11 @@ Before you begin, you'll need:
   </Step>
 </Steps>
 
-## Step 2: Create a Voice Agent
-
-Before making calls, you need a voice agent. You can create one in the dashboard or via API:
+### Create an Agent via API
 
 <CodeGroup>
 ```bash cURL
-curl https://api.ringyo.ai/v1/agents \
+curl https://www.ringyo.ai/api/v1/agents \
   -X POST \
   -H "Authorization: Bearer vb_live_YOUR_API_KEY" \
   -H "Content-Type: application/json" \
@@ -51,7 +119,7 @@ curl https://api.ringyo.ai/v1/agents \
 ```
 
 ```javascript Node.js
-const response = await fetch('https://api.ringyo.ai/v1/agents', {
+const response = await fetch('https://www.ringyo.ai/api/v1/agents', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer vb_live_YOUR_API_KEY',
@@ -73,7 +141,7 @@ console.log('Agent created:', agent.id);
 import requests
 
 response = requests.post(
-    'https://api.ringyo.ai/v1/agents',
+    'https://www.ringyo.ai/api/v1/agents',
     headers={
         'Authorization': 'Bearer vb_live_YOUR_API_KEY',
         'Content-Type': 'application/json'
@@ -91,83 +159,18 @@ print(f"Agent created: {agent['id']}")
 ```
 </CodeGroup>
 
-Save the `agent.id` from the response — you'll need it for making calls.
+### Calls API
 
-## Step 3: Make Your First Call
+<Warning>
+  API access to calls is coming soon. The calls endpoints (`/api/v1/calls`) currently return `501 Not Implemented`. For now, use the dashboard to manage calls and view call history. Agent, webhook, and other endpoints are fully functional.
+</Warning>
 
-Now let's make an outbound call:
+### Set Up Webhooks
 
-<CodeGroup>
-```bash cURL
-curl https://api.ringyo.ai/v1/calls \
-  -X POST \
-  -H "Authorization: Bearer vb_live_YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "to": "+1234567890",
-    "agent_id": "YOUR_AGENT_ID",
-    "context": {
-      "customer_name": "John Smith",
-      "purpose": "appointment reminder"
-    }
-  }'
-```
-
-```javascript Node.js
-const response = await fetch('https://api.ringyo.ai/v1/calls', {
-  method: 'POST',
-  headers: {
-    'Authorization': 'Bearer vb_live_YOUR_API_KEY',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    to: '+1234567890',
-    agent_id: 'YOUR_AGENT_ID',
-    context: {
-      customer_name: 'John Smith',
-      purpose: 'appointment reminder'
-    }
-  })
-});
-
-const call = await response.json();
-console.log('Call initiated:', call.id);
-```
-
-```python Python
-import requests
-
-response = requests.post(
-    'https://api.ringyo.ai/v1/calls',
-    headers={
-        'Authorization': 'Bearer vb_live_YOUR_API_KEY',
-        'Content-Type': 'application/json'
-    },
-    json={
-        'to': '+1234567890',
-        'agent_id': 'YOUR_AGENT_ID',
-        'context': {
-            'customer_name': 'John Smith',
-            'purpose': 'appointment reminder'
-        }
-    }
-)
-
-call = response.json()
-print(f"Call initiated: {call['id']}")
-```
-</CodeGroup>
-
-<Check>
-  Congratulations! You've just made your first AI-powered phone call.
-</Check>
-
-## Step 4: Listen for Events
-
-Set up a webhook to receive real-time updates about your calls:
+Receive real-time updates when calls complete:
 
 ```bash
-curl https://api.ringyo.ai/v1/webhooks \
+curl https://www.ringyo.ai/api/v1/webhooks \
   -X POST \
   -H "Authorization: Bearer vb_live_YOUR_API_KEY" \
   -H "Content-Type: application/json" \
@@ -177,33 +180,14 @@ curl https://api.ringyo.ai/v1/webhooks \
   }'
 ```
 
-When the call completes, you'll receive a webhook like this:
-
-```json
-{
-  "event": "call.completed",
-  "timestamp": "2024-01-15T10:30:00Z",
-  "data": {
-    "call_id": "call_abc123",
-    "duration_seconds": 145,
-    "outcome": "appointment_booked",
-    "transcript": "...",
-    "extracted_data": {
-      "appointment_date": "2024-01-20",
-      "appointment_time": "14:00"
-    }
-  }
-}
-```
-
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="API Reference" icon="code" href="/api-reference/introduction">
-    Explore all available endpoints and parameters.
+  <Card title="Knowledge Base" icon="brain" href="/guides/knowledge-base">
+    Train your agent with FAQs and service details.
   </Card>
-  <Card title="n8n Integration" icon="plug" href="/integrations/n8n">
-    Connect Ringyo to n8n for powerful automations.
+  <Card title="API Reference" icon="code" href="/api-reference/introduction">
+    Explore all available API endpoints.
   </Card>
   <Card title="Webhooks" icon="webhook" href="/concepts/webhooks">
     Learn about all webhook events and payloads.
