@@ -1,0 +1,75 @@
+---
+title: "Custom Branding"
+description: "Customize the Ringyo AI chat widget with your brand colors, logo, and styling (Pro+ feature)"
+---
+
+# Custom Branding
+
+Make the chat widget look like a natural part of your website by customizing colors, logo, and removing Ringyo branding. Available on **Pro** and **Agency** plans.
+
+<Note>Custom branding is a Pro+ feature. [Upgrade your plan](/guides/plans-and-billing) if you're on the Starter plan.</Note>
+
+## Branding Options
+
+Navigate to **Dashboard → Settings → Chat Widget → Branding** to access customization.
+
+### Colors
+
+| Setting | Description |
+|---------|-------------|
+| **Primary Color** | Widget header, send button, and accent color |
+| **Background Color** | Chat window background |
+| **Text Color** | Message text color |
+| **User Bubble Color** | Color of the visitor's message bubbles |
+| **Agent Bubble Color** | Color of the agent's message bubbles |
+
+### Logo & Avatar
+
+- **Widget Icon** — replaces the default chat bubble icon with your logo
+- **Agent Avatar** — shown next to agent messages in the chat
+- **Header Logo** — displayed in the chat widget header
+
+Upload images in PNG, JPG, or SVG format. Recommended size: 64×64px for avatars, 200×40px for header logos.
+
+### Branding Removal
+
+Toggle **Hide "Powered by Ringyo"** to remove the Ringyo attribution from the widget footer.
+
+## Configuration
+
+<Steps>
+  <Step title="Upload your assets">
+    Go to **Settings → Chat Widget → Branding** and upload your logo and avatar images.
+  </Step>
+  <Step title="Set your colors">
+    Use the color picker or enter hex values to match your brand palette.
+  </Step>
+  <Step title="Preview">
+    Use the live preview on the right side of the settings page to see changes in real time.
+  </Step>
+  <Step title="Save and deploy">
+    Click **Save**. Changes are applied immediately to all pages using your embed code — no code changes needed.
+  </Step>
+</Steps>
+
+## CSS Override (Advanced)
+
+For more granular control, you can override widget styles with CSS:
+
+```css
+/* Custom widget styling */
+#ringyo-widget .rg-header {
+  border-radius: 16px 16px 0 0;
+}
+
+#ringyo-widget .rg-message--agent {
+  font-family: 'Your Brand Font', sans-serif;
+}
+```
+
+<Warning>CSS overrides may break with widget updates. Use the built-in branding options when possible.</Warning>
+
+## Next Steps
+
+- [Chat Widget](/guides/chat-widget) — embedding basics
+- [Embedding Widget](/advanced/embedding-widget) — advanced embed options

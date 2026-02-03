@@ -1,6 +1,6 @@
 ---
 title: 'List Phone Numbers'
-api: 'GET https://api.voicebook.ai/v1/phone-numbers'
+api: 'GET https://api.ringyo.ai/v1/phone-numbers'
 description: 'List all phone numbers in your account'
 ---
 
@@ -52,13 +52,13 @@ Retrieve a list of all phone numbers associated with your account.
 
 <RequestExample>
 ```bash cURL
-curl "https://api.voicebook.ai/v1/phone-numbers?status=active" \
+curl "https://api.ringyo.ai/v1/phone-numbers?status=active" \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
 ```javascript Node.js
 const response = await fetch(
-  'https://api.voicebook.ai/v1/phone-numbers?status=active',
+  'https://api.ringyo.ai/v1/phone-numbers?status=active',
   {
     headers: {
       'Authorization': 'Bearer YOUR_API_KEY',
@@ -73,7 +73,7 @@ const { data } = await response.json();
 import requests
 
 response = requests.get(
-    'https://api.voicebook.ai/v1/phone-numbers',
+    'https://api.ringyo.ai/v1/phone-numbers',
     headers={'Authorization': 'Bearer YOUR_API_KEY'},
     params={'status': 'active'}
 )

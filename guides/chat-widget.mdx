@@ -1,0 +1,93 @@
+---
+title: "Chat Widget"
+description: "Embed the Ringyo AI chat widget on your website for instant customer engagement"
+---
+
+# Chat Widget
+
+Add an AI-powered chat widget to your website so visitors can get instant answers, book appointments, and connect with your business 24/7.
+
+## Setting Up the Widget
+
+<Steps>
+  <Step title="Go to Chat Widget settings">
+    Navigate to **Dashboard → Settings → Chat Widget**.
+  </Step>
+  <Step title="Configure appearance">
+    Customize the widget to match your brand:
+    - **Primary color** — button and header color
+    - **Position** — bottom-right or bottom-left
+    - **Welcome message** — what visitors see when they open the chat
+    - **Agent name** — display name shown in the chat header
+  </Step>
+  <Step title="Select an agent">
+    Choose which AI agent handles chat conversations.
+  </Step>
+  <Step title="Copy the embed code">
+    Click **Get Code** to copy the embed snippet.
+  </Step>
+  <Step title="Add to your website">
+    Paste the code before the closing `</body>` tag on your website.
+  </Step>
+</Steps>
+
+## Embed Code
+
+The embed snippet looks like this:
+
+```html
+<script
+  src="https://widget.ringyo.ai/chat.js"
+  data-agent-id="YOUR_AGENT_ID"
+  data-color="#0D9488"
+  data-position="bottom-right"
+  async
+></script>
+```
+
+<Info>The widget loads asynchronously and won't slow down your page.</Info>
+
+## Customization Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `data-color` | Primary color (hex) | `#0D9488` |
+| `data-position` | `bottom-right` or `bottom-left` | `bottom-right` |
+| `data-welcome` | Welcome message text | "Hi! How can I help?" |
+| `data-name` | Agent display name | Your agent's name |
+| `data-avatar` | Avatar image URL | Ringyo default |
+| `data-hide-branding` | Hide "Powered by Ringyo" (Pro+) | `false` |
+
+<Tip>On Pro and Agency plans, you can upload a custom avatar and remove Ringyo branding. See [Custom Branding](/advanced/custom-branding).</Tip>
+
+## Platform Guides
+
+<Tabs>
+  <Tab title="WordPress">
+    1. Go to **Appearance → Theme Editor** (or use a plugin like "Insert Headers and Footers")
+    2. Paste the embed code before `</body>` in your theme's footer
+    3. Save changes
+  </Tab>
+  <Tab title="Shopify">
+    1. Go to **Online Store → Themes → Edit Code**
+    2. Open `theme.liquid`
+    3. Paste the embed code before `</body>`
+    4. Save
+  </Tab>
+  <Tab title="Wix">
+    1. Go to **Settings → Custom Code**
+    2. Click **Add Custom Code**
+    3. Paste the embed code, set placement to "Body - end"
+    4. Apply to all pages
+  </Tab>
+  <Tab title="Custom HTML">
+    Paste the embed code directly before `</body>` in your HTML files.
+  </Tab>
+</Tabs>
+
+For the full embedding guide with advanced options, see [Embedding Widget](/advanced/embedding-widget).
+
+## Next Steps
+
+- [Custom Branding](/advanced/custom-branding) — match the widget to your brand
+- [Knowledge Base](/guides/knowledge-base) — train the chat agent

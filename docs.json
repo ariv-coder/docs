@@ -1,11 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "VoiceBook AI",
+  "name": "Ringyo AI",
   "colors": {
-    "primary": "#4F46E5",
-    "light": "#818CF8",
-    "dark": "#3730A3"
+    "primary": "#0D9488",
+    "light": "#2DD4BF",
+    "dark": "#115E59"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -18,7 +18,21 @@
             "pages": [
               "introduction",
               "quickstart",
-              "authentication"
+              "guides/account-setup",
+              "guides/plans-and-billing"
+            ]
+          },
+          {
+            "group": "Dashboard Guide",
+            "pages": [
+              "guides/dashboard-overview",
+              "guides/business-setup",
+              "guides/voice-agent-setup",
+              "guides/knowledge-base",
+              "guides/phone-numbers",
+              "guides/chat-widget",
+              "guides/appointments",
+              "guides/analytics"
             ]
           },
           {
@@ -26,6 +40,7 @@
             "pages": [
               "concepts/agents",
               "concepts/calls",
+              "concepts/credits",
               "concepts/webhooks"
             ]
           },
@@ -35,6 +50,15 @@
               "integrations/n8n",
               "integrations/zapier",
               "integrations/make"
+            ]
+          },
+          {
+            "group": "Advanced",
+            "pages": [
+              "authentication",
+              "advanced/custom-branding",
+              "advanced/api-keys",
+              "advanced/embedding-widget"
             ]
           }
         ]
@@ -88,18 +112,13 @@
       "anchors": [
         {
           "anchor": "Dashboard",
-          "href": "https://voicebook-ai.vercel.app/dashboard",
-          "icon": "chart-line"
+          "href": "https://www.ringyo.ai/dashboard",
+          "icon": "gauge"
         },
         {
-          "anchor": "GitHub",
-          "href": "https://github.com/1labs-ai/voicebook-ai",
-          "icon": "github"
-        },
-        {
-          "anchor": "Discord",
-          "href": "https://discord.gg/voicebook",
-          "icon": "discord"
+          "anchor": "Support",
+          "href": "mailto:support@ringyo.ai",
+          "icon": "envelope"
         }
       ]
     }
@@ -112,13 +131,13 @@
     "links": [
       {
         "label": "Pricing",
-        "href": "https://voicebook-ai.vercel.app/pricing"
+        "href": "https://www.ringyo.ai/pricing"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Get Started",
-      "href": "https://voicebook-ai.vercel.app/sign-up"
+      "href": "https://www.ringyo.ai/sign-up"
     }
   },
   "contextual": {
@@ -131,9 +150,9 @@
   },
   "footer": {
     "socials": {
-      "x": "https://twitter.com/voicebookai",
-      "github": "https://github.com/1labs-ai",
-      "linkedin": "https://linkedin.com/company/1labs-ai"
+      "x": "https://twitter.com/ringyoai",
+      "linkedin": "https://linkedin.com/company/1labs-ai",
+      "website": "https://www.ringyo.ai"
     }
   }
 }

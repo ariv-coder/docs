@@ -1,0 +1,94 @@
+---
+title: "API Keys"
+description: "Generate and manage API keys for the Ringyo AI API from the Developers page"
+---
+
+# API Keys
+
+API keys let you interact with the Ringyo AI API programmatically. Available on **Pro** and **Agency** plans.
+
+## Generating an API Key
+
+<Steps>
+  <Step title="Go to Developers">
+    Navigate to **Dashboard → Developers → API Keys**.
+  </Step>
+  <Step title="Create a new key">
+    Click **Create API Key** and provide:
+    - **Name** — a descriptive label (e.g., "Production Server", "Staging")
+    - **Permissions** — choose which resources the key can access
+  </Step>
+  <Step title="Copy your key">
+    Your API key will be displayed once. Copy and store it securely.
+    <Warning>The full API key is only shown at creation. If you lose it, you'll need to create a new one.</Warning>
+  </Step>
+</Steps>
+
+## Key Format
+
+API keys follow this format:
+
+```
+rg_live_aBcDeFgHiJkLmNoPqRsT...
+rg_test_aBcDeFgHiJkLmNoPqRsT...
+```
+
+- `rg_live_` — production keys that make real calls and consume credits
+- `rg_test_` — test keys for development (no real calls, no credit usage)
+
+## Using Your API Key
+
+Include the key in the `Authorization` header:
+
+```bash
+curl https://api.ringyo.ai/v1/agents \
+  -H "Authorization: Bearer rg_live_YOUR_API_KEY"
+```
+
+See the [API Reference](/api-reference/introduction) for full documentation.
+
+## Permissions
+
+When creating a key, you can scope it to specific resources:
+
+| Permission | Access |
+|-----------|--------|
+| **Agents** | Create, read, update, delete agents |
+| **Calls** | Initiate calls, read call logs |
+| **Phone Numbers** | List and manage phone numbers |
+| **Webhooks** | Manage webhook endpoints |
+| **Read Only** | View data without making changes |
+
+<Tip>Follow the principle of least privilege. Only grant permissions each key actually needs.</Tip>
+
+## Managing Keys
+
+From **Dashboard → Developers → API Keys**, you can:
+
+- **View** — see all active keys with last used timestamps
+- **Rename** — update the key name or description
+- **Revoke** — permanently disable a key (cannot be undone)
+- **Regenerate** — create a new key and disable the old one
+
+## Rate Limits
+
+| Plan | Rate Limit |
+|------|-----------|
+| Pro | 60 requests/minute |
+| Agency | 300 requests/minute |
+
+Exceeding the limit returns `429 Too Many Requests`. Implement exponential backoff in your integration.
+
+## Security Best Practices
+
+- **Never expose keys in client-side code** — only use them server-side
+- **Use environment variables** — don't hardcode keys in source code
+- **Rotate regularly** — regenerate keys periodically
+- **Use test keys for development** — avoid spending credits during testing
+
+<Info>If you suspect a key has been compromised, revoke it immediately from the dashboard.</Info>
+
+## Next Steps
+
+- [API Reference](/api-reference/introduction) — explore available endpoints
+- [Webhooks](/concepts/webhooks) — receive real-time event notifications

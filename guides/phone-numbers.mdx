@@ -1,0 +1,80 @@
+---
+title: "Phone Numbers"
+description: "Connect Twilio phone numbers to your Ringyo AI agent for inbound and outbound calls"
+---
+
+# Phone Numbers
+
+Your AI agent needs a phone number to make and receive calls. Ringyo AI integrates with Twilio for phone number provisioning.
+
+## Getting a Phone Number
+
+<Steps>
+  <Step title="Go to Phone Numbers">
+    Navigate to **Dashboard → Phone Numbers** and click **Add Number**.
+  </Step>
+  <Step title="Choose your method">
+    You have two options:
+    - **Buy a new number** — purchase a number directly through Ringyo (powered by Twilio)
+    - **Connect existing** — link a Twilio number you already own
+  </Step>
+  <Step title="Select your number">
+    If buying new, choose your preferred:
+    - **Country** — US, UK, Canada, and more
+    - **Area code** — search by region or city
+    - **Number type** — local, toll-free, or mobile
+  </Step>
+  <Step title="Assign to an agent">
+    Select which voice agent should handle calls on this number.
+  </Step>
+  <Step title="Activate">
+    Click **Activate** and your number is live. Calls to this number will be answered by your AI agent.
+  </Step>
+</Steps>
+
+## Connecting an Existing Twilio Number
+
+If you already have a Twilio account with phone numbers:
+
+<Steps>
+  <Step title="Get your Twilio credentials">
+    From your [Twilio Console](https://console.twilio.com), copy your **Account SID** and **Auth Token**.
+  </Step>
+  <Step title="Connect in Ringyo">
+    Go to **Dashboard → Phone Numbers → Connect Existing** and paste your credentials.
+  </Step>
+  <Step title="Select numbers">
+    Ringyo will display your available Twilio numbers. Select the ones you want to use.
+  </Step>
+</Steps>
+
+<Warning>Connecting an existing number will update its webhook configuration in Twilio. If you're using the number elsewhere, it will stop receiving calls there.</Warning>
+
+## Number Limits
+
+Each plan has a limit on phone numbers:
+
+| Plan | Numbers Included |
+|------|-----------------|
+| Starter | 1 |
+| Pro | 3 |
+| Agency | 10 |
+
+<Info>Need more numbers? Contact support at **support@ringyo.ai** for custom limits.</Info>
+
+## Managing Numbers
+
+From the Phone Numbers page you can:
+
+- **Reassign** — move a number to a different agent
+- **Disable** — temporarily stop the agent from answering (calls go to voicemail)
+- **Release** — remove the number from your account
+
+## Number Costs
+
+Phone numbers purchased through Ringyo are included in your plan. Twilio carrier charges (if any) are handled automatically.
+
+## Next Steps
+
+- [Voice Agent Setup](/guides/voice-agent-setup) — configure the agent for your number
+- [Analytics](/guides/analytics) — track call performance

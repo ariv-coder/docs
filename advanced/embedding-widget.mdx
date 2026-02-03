@@ -1,0 +1,173 @@
+---
+title: "Embedding Widget"
+description: "Complete guide to embedding the Ringyo AI chat widget with code examples and advanced options"
+---
+
+# Embedding Widget
+
+This guide covers everything you need to embed the Ringyo AI chat widget on your website, including code examples and advanced configuration.
+
+## Basic Embed
+
+Add this snippet before the closing `</body>` tag:
+
+```html
+<script
+  src="https://widget.ringyo.ai/chat.js"
+  data-agent-id="YOUR_AGENT_ID"
+  async
+></script>
+```
+
+That's it — the widget will appear in the bottom-right corner of your page.
+
+## Full Configuration
+
+```html
+<script
+  src="https://widget.ringyo.ai/chat.js"
+  data-agent-id="YOUR_AGENT_ID"
+  data-color="#0D9488"
+  data-position="bottom-right"
+  data-welcome="Hi! How can I help you today?"
+  data-name="Support Agent"
+  data-avatar="https://yoursite.com/avatar.png"
+  data-hide-branding="false"
+  data-auto-open="false"
+  data-delay="3000"
+  async
+></script>
+```
+
+### Attribute Reference
+
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `data-agent-id` | string | *required* | Your agent's ID (from Dashboard → Agents) |
+| `data-color` | hex string | `#0D9488` | Primary accent color |
+| `data-position` | string | `bottom-right` | `bottom-right` or `bottom-left` |
+| `data-welcome` | string | "Hi! How can I help?" | Initial message shown to visitors |
+| `data-name` | string | Agent name | Display name in chat header |
+| `data-avatar` | URL | Ringyo default | Agent avatar image URL |
+| `data-hide-branding` | boolean | `false` | Hide "Powered by Ringyo" (Pro+) |
+| `data-auto-open` | boolean | `false` | Auto-open widget on page load |
+| `data-delay` | number | `0` | Delay before auto-open (ms) |
+
+## JavaScript API
+
+Control the widget programmatically after it loads:
+
+```javascript
+// Open the widget
+window.RingyoChat.open();
+
+// Close the widget
+window.RingyoChat.close();
+
+// Toggle open/closed
+window.RingyoChat.toggle();
+
+// Send a message programmatically
+window.RingyoChat.sendMessage('I need to book an appointment');
+
+// Set visitor info (for personalization)
+window.RingyoChat.setVisitor({
+  name: 'Jane Smith',
+  email: 'jane@example.com',
+  phone: '+1234567890'
+});
+```
+
+## Framework Examples
+
+<Tabs>
+  <Tab title="React">
+    ```jsx
+    import { useEffect } from 'react';
+
+    function ChatWidget() {
+      useEffect(() => {
+        const script = document.createElement('script');
+        script.src = 'https://widget.ringyo.ai/chat.js';
+        script.setAttribute('data-agent-id', 'YOUR_AGENT_ID');
+        script.async = true;
+        document.body.appendChild(script);
+
+        return () => document.body.removeChild(script);
+      }, []);
+
+      return null;
+    }
+
+    export default ChatWidget;
+    ```
+  </Tab>
+  <Tab title="Next.js">
+    ```jsx
+    import Script from 'next/script';
+
+    export default function Layout({ children }) {
+      return (
+        <>
+          {children}
+          <Script
+            src="https://widget.ringyo.ai/chat.js"
+            data-agent-id="YOUR_AGENT_ID"
+            strategy="lazyOnload"
+          />
+        </>
+      );
+    }
+    ```
+  </Tab>
+  <Tab title="Vue">
+    ```vue
+    <script setup>
+    import { onMounted, onUnmounted } from 'vue';
+
+    let script;
+
+    onMounted(() => {
+      script = document.createElement('script');
+      script.src = 'https://widget.ringyo.ai/chat.js';
+      script.setAttribute('data-agent-id', 'YOUR_AGENT_ID');
+      script.async = true;
+      document.body.appendChild(script);
+    });
+
+    onUnmounted(() => {
+      if (script) document.body.removeChild(script);
+    });
+    </script>
+    ```
+  </Tab>
+</Tabs>
+
+## Event Callbacks
+
+Listen for widget events:
+
+```javascript
+window.addEventListener('ringyo:ready', () => {
+  console.log('Widget loaded');
+});
+
+window.addEventListener('ringyo:message', (e) => {
+  console.log('New message:', e.detail);
+});
+
+window.addEventListener('ringyo:open', () => {
+  console.log('Widget opened');
+});
+
+window.addEventListener('ringyo:close', () => {
+  console.log('Widget closed');
+});
+```
+
+<Tip>Use event callbacks to trigger custom analytics or integrate with your app's state management.</Tip>
+
+## Next Steps
+
+- [Chat Widget](/guides/chat-widget) — basic setup guide
+- [Custom Branding](/advanced/custom-branding) — style the widget to match your brand

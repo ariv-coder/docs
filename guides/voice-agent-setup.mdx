@@ -1,0 +1,94 @@
+---
+title: "Voice Agent Setup"
+description: "Create and configure a voice agent in Ringyo AI — choose voice, personality, greeting, and instructions"
+---
+
+# Voice Agent Setup
+
+Your voice agent is the AI that handles calls and chats for your business. Here's how to create and configure one.
+
+## Create an Agent
+
+<Steps>
+  <Step title="Go to Agents">
+    Navigate to **Dashboard → Agents** and click **Create Agent**.
+  </Step>
+  <Step title="Name your agent">
+    Give it a descriptive name (e.g., "Front Desk Agent" or "Sales Assistant"). This is internal — callers won't see it.
+  </Step>
+  <Step title="Choose a voice">
+    Select from available voice options. You can preview each voice before selecting. Options vary by accent, gender, and tone.
+  </Step>
+  <Step title="Set the greeting">
+    Write the first thing your agent says when answering a call:
+    
+    > "Hi, thanks for calling Acme Dental! I'm here to help with appointments, hours, or any questions. How can I help you today?"
+  </Step>
+  <Step title="Add instructions">
+    Tell the agent how to behave. Be specific:
+    - What services can it book?
+    - What questions should it ask?
+    - When should it transfer to a human?
+    - What info should it collect?
+  </Step>
+  <Step title="Save and activate">
+    Click **Save** to create the agent. Toggle it to **Active** to start receiving calls.
+  </Step>
+</Steps>
+
+## Agent Configuration
+
+### Personality & Tone
+
+Configure how your agent communicates:
+
+| Setting | Description |
+|---------|-------------|
+| **Tone** | Professional, friendly, casual, or formal |
+| **Language** | Primary language for conversations |
+| **Speed** | How fast the agent speaks |
+| **Interruption handling** | Whether the agent pauses when the caller speaks |
+
+### Instructions Best Practices
+
+<Tip>Write instructions like you're training a new employee. Be clear about what the agent should and shouldn't do.</Tip>
+
+Good instructions include:
+- **Role:** "You are a receptionist for a dental clinic"
+- **Tasks:** "Book appointments, answer FAQs, provide hours and directions"
+- **Boundaries:** "Don't give medical advice. Transfer to a human if asked about pricing for complex procedures"
+- **Data collection:** "Always ask for the caller's name and phone number before booking"
+
+### Call Handling
+
+Configure what happens in different scenarios:
+
+<CardGroup cols={2}>
+  <Card title="Transfer Rules" icon="phone-arrow-right">
+    Set conditions to transfer calls to a human (e.g., "transfer if caller asks for manager")
+  </Card>
+  <Card title="After-Hours" icon="moon">
+    Custom message or voicemail when outside business hours
+  </Card>
+  <Card title="Fallback" icon="life-ring">
+    What to do when the agent can't help (e.g., take a message, transfer)
+  </Card>
+  <Card title="Max Duration" icon="hourglass">
+    Set a maximum call duration to manage credit usage
+  </Card>
+</CardGroup>
+
+## Testing Your Agent
+
+Before going live, test your agent:
+
+1. Click **Test Call** on the agent page
+2. Ringyo will call your phone so you can interact with the agent
+3. Review the transcript and adjust instructions as needed
+
+<Warning>Each test call uses credits from your balance (5 credits per minute).</Warning>
+
+## Next Steps
+
+- [Knowledge Base](/guides/knowledge-base) — train your agent with FAQs
+- [Phone Numbers](/guides/phone-numbers) — connect a phone number

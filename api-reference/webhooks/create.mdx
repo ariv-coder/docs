@@ -1,12 +1,12 @@
 ---
 title: 'Create Webhook'
-api: 'POST https://api.voicebook.ai/v1/webhooks'
+api: 'POST https://api.ringyo.ai/v1/webhooks'
 description: 'Create a new webhook endpoint'
 ---
 
 ## Request
 
-Create a new webhook endpoint to receive real-time events from VoiceBook AI.
+Create a new webhook endpoint to receive real-time events from Ringyo AI.
 
 ### Headers
 
@@ -80,25 +80,25 @@ Create a new webhook endpoint to receive real-time events from VoiceBook AI.
 
 <RequestExample>
 ```bash cURL
-curl -X POST https://api.voicebook.ai/v1/webhooks \
+curl -X POST https://api.ringyo.ai/v1/webhooks \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "url": "https://your-app.com/webhooks/voicebook",
+    "url": "https://your-app.com/webhooks/ringyo",
     "events": ["call.completed", "call.recording.ready"],
     "description": "Production webhook"
   }'
 ```
 
 ```javascript Node.js
-const response = await fetch('https://api.voicebook.ai/v1/webhooks', {
+const response = await fetch('https://api.ringyo.ai/v1/webhooks', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY',
     'Content-Type': 'application/json',
   },
   body: JSON.stringify({
-    url: 'https://your-app.com/webhooks/voicebook',
+    url: 'https://your-app.com/webhooks/ringyo',
     events: ['call.completed', 'call.recording.ready'],
     description: 'Production webhook'
   })
@@ -112,13 +112,13 @@ const webhook = await response.json();
 import requests
 
 response = requests.post(
-    'https://api.voicebook.ai/v1/webhooks',
+    'https://api.ringyo.ai/v1/webhooks',
     headers={
         'Authorization': 'Bearer YOUR_API_KEY',
         'Content-Type': 'application/json',
     },
     json={
-        'url': 'https://your-app.com/webhooks/voicebook',
+        'url': 'https://your-app.com/webhooks/ringyo',
         'events': ['call.completed', 'call.recording.ready'],
         'description': 'Production webhook'
     }
@@ -133,7 +133,7 @@ webhook = response.json()
 ```json 201 - Created
 {
   "id": "wh_abc123",
-  "url": "https://your-app.com/webhooks/voicebook",
+  "url": "https://your-app.com/webhooks/ringyo",
   "events": ["call.completed", "call.recording.ready"],
   "secret": "whsec_a1b2c3d4e5f6g7h8i9j0...",
   "description": "Production webhook",
@@ -182,8 +182,8 @@ function verifyWebhook(payload, signature, secret) {
 }
 
 // In your webhook handler:
-app.post('/webhooks/voicebook', (req, res) => {
-  const signature = req.headers['x-voicebook-signature'];
+app.post('/webhooks/ringyo', (req, res) => {
+  const signature = req.headers['x-ringyo-signature'];
   
   if (!verifyWebhook(JSON.stringify(req.body), signature, WEBHOOK_SECRET)) {
     return res.status(401).send('Invalid signature');

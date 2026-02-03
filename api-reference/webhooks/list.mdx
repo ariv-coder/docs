@@ -1,6 +1,6 @@
 ---
 title: 'List Webhooks'
-api: 'GET https://api.voicebook.ai/v1/webhooks'
+api: 'GET https://api.ringyo.ai/v1/webhooks'
 description: 'List all webhook endpoints'
 ---
 
@@ -48,13 +48,13 @@ Retrieve a list of all webhook endpoints configured for your account.
 
 <RequestExample>
 ```bash cURL
-curl "https://api.voicebook.ai/v1/webhooks?status=active" \
+curl "https://api.ringyo.ai/v1/webhooks?status=active" \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
 ```javascript Node.js
 const response = await fetch(
-  'https://api.voicebook.ai/v1/webhooks?status=active',
+  'https://api.ringyo.ai/v1/webhooks?status=active',
   {
     headers: {
       'Authorization': 'Bearer YOUR_API_KEY',
@@ -69,7 +69,7 @@ const { data } = await response.json();
 import requests
 
 response = requests.get(
-    'https://api.voicebook.ai/v1/webhooks',
+    'https://api.ringyo.ai/v1/webhooks',
     headers={'Authorization': 'Bearer YOUR_API_KEY'},
     params={'status': 'active'}
 )
@@ -85,7 +85,7 @@ webhooks = data['data']
   "data": [
     {
       "id": "wh_abc123",
-      "url": "https://your-app.com/webhooks/voicebook",
+      "url": "https://your-app.com/webhooks/ringyo",
       "events": ["call.completed", "call.recording.ready"],
       "description": "Production webhook",
       "status": "active",
@@ -94,7 +94,7 @@ webhooks = data['data']
     },
     {
       "id": "wh_def456",
-      "url": "https://staging.your-app.com/webhooks/voicebook",
+      "url": "https://staging.your-app.com/webhooks/ringyo",
       "events": ["*"],
       "description": "Staging - all events",
       "status": "active",

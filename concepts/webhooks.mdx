@@ -1,17 +1,17 @@
 ---
 title: Webhooks
-description: "Receive real-time notifications for VoiceBook AI events"
+description: "Receive real-time notifications for Ringyo events"
 ---
 
 # Webhooks
 
-Webhooks allow you to receive real-time notifications when events happen in VoiceBook AI. Instead of polling the API, events are pushed to your server automatically.
+Webhooks allow you to receive real-time notifications when events happen in Ringyo AI. Instead of polling the API, events are pushed to your server automatically.
 
 ## How Webhooks Work
 
 1. You register a webhook endpoint URL
 2. Select which events you want to receive
-3. When an event occurs, VoiceBook AI sends an HTTP POST to your URL
+3. When an event occurs, Ringyo sends an HTTP POST to your URL
 4. Your server processes the event and responds with `200 OK`
 
 ## Setting Up Webhooks
@@ -27,7 +27,7 @@ Webhooks allow you to receive real-time notifications when events happen in Voic
 ### Via API
 
 ```bash
-curl https://api.voicebook.ai/v1/webhooks \
+curl https://api.ringyo.ai/v1/webhooks \
   -X POST \
   -H "Authorization: Bearer vb_live_YOUR_API_KEY" \
   -H "Content-Type: application/json" \
@@ -152,14 +152,14 @@ All webhooks follow this structure:
 
 ## Verifying Webhooks
 
-Always verify webhook signatures to ensure they came from VoiceBook AI.
+Always verify webhook signatures to ensure they came from Ringyo AI.
 
 ### Signature Header
 
 Each webhook includes a signature:
 
 ```
-X-VoiceBook-Signature: t=1705312800,v1=abc123...
+X-Ringyo-Signature: t=1705312800,v1=abc123...
 ```
 
 ### Verification Example
@@ -192,7 +192,7 @@ function verifyWebhook(payload, signature, secret) {
 
 // In your webhook handler
 app.post('/webhook', (req, res) => {
-  const signature = req.headers['x-voicebook-signature'];
+  const signature = req.headers['x-ringyo-signature'];
   const payload = JSON.stringify(req.body);
   
   try {
@@ -238,7 +238,7 @@ def verify_webhook(payload: str, signature: str, secret: str) -> bool:
 
 If your endpoint doesn't respond with `2xx`:
 
-1. VoiceBook AI retries up to **5 times**
+1. Ringyo retries up to **5 times**
 2. Exponential backoff: 1s, 5s, 30s, 2m, 10m
 3. After 10 consecutive failures, webhook is auto-disabled
 

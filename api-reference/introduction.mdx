@@ -1,18 +1,18 @@
 ---
 title: API Reference
-description: "Complete reference for the VoiceBook AI REST API"
+description: "Complete reference for the Ringyo AI REST API"
 ---
 
 # API Reference
 
-Welcome to the VoiceBook AI API reference. This documentation covers all available endpoints for integrating VoiceBook AI into your applications.
+Welcome to the Ringyo AI API reference. This documentation covers all available endpoints for integrating Ringyo AI into your applications.
 
 ## Base URL
 
 All API requests should be made to:
 
 ```
-https://api.voicebook.ai/v1
+https://api.ringyo.ai/v1
 ```
 
 ## Authentication
@@ -118,7 +118,7 @@ X-RateLimit-Reset: 1705312800
 For POST requests, you can include an `Idempotency-Key` header to ensure the request is only processed once:
 
 ```bash
-curl https://api.voicebook.ai/v1/calls \
+curl https://api.ringyo.ai/v1/calls \
   -X POST \
   -H "Authorization: Bearer vb_live_YOUR_API_KEY" \
   -H "Idempotency-Key: unique-request-id-123" \
@@ -157,4 +157,4 @@ In the meantime, use any HTTP client with the REST API.
 
 - Browse the [Quick Start Guide](/quickstart)
 - Check [n8n Integration](/integrations/n8n) for automation
-- Join our [Discord](https://discord.gg/voicebook) for support
+- Join our [Discord](https://ringyo.ai/contact) for support

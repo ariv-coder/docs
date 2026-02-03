@@ -1,25 +1,25 @@
 ---
 title: n8n Integration
-description: "Connect VoiceBook AI to n8n for powerful workflow automation"
+description: "Connect Ringyo AI to n8n for powerful workflow automation"
 ---
 
 # n8n Integration
 
-n8n is a powerful workflow automation tool that lets you connect VoiceBook AI with hundreds of other apps and services. This guide shows you how to integrate VoiceBook AI with n8n using HTTP Request nodes.
+n8n is a powerful workflow automation tool that lets you connect Ringyo AI with hundreds of other apps and services. This guide shows you how to integrate Ringyo AI with n8n using HTTP Request nodes.
 
 <Note>
-  No custom node installation required — n8n's built-in HTTP Request node works perfectly with VoiceBook AI's REST API.
+  No custom node installation required — n8n's built-in HTTP Request node works perfectly with Ringyo AI's REST API.
 </Note>
 
 ## Prerequisites
 
-- A VoiceBook AI account with Pro or Agency plan
+- A Ringyo AI account with Pro or Agency plan
 - An API key (from Dashboard → Developers)
 - n8n installed (self-hosted or cloud)
 
 ## Setting Up Authentication
 
-First, create a reusable credential in n8n for VoiceBook AI:
+First, create a reusable credential in n8n for Ringyo AI:
 
 <Steps>
   <Step title="Open Credentials">
@@ -33,7 +33,7 @@ First, create a reusable credential in n8n for VoiceBook AI:
     - **Value**: `Bearer vb_live_YOUR_API_KEY`
   </Step>
   <Step title="Save">
-    Name it "VoiceBook AI" and save.
+    Name it "Ringyo AI" and save.
   </Step>
 </Steps>
 
@@ -45,11 +45,11 @@ Here's a simple workflow that makes an outbound call when triggered:
 
 ```json
 {
-  "name": "Make VoiceBook Call",
+  "name": "Make Ringyo Call",
   "type": "n8n-nodes-base.httpRequest",
   "parameters": {
     "method": "POST",
-    "url": "https://api.voicebook.ai/v1/calls",
+    "url": "https://api.ringyo.ai/v1/calls",
     "authentication": "predefinedCredentialType",
     "nodeCredentialType": "httpHeaderAuth",
     "sendHeaders": true,
@@ -86,8 +86,8 @@ Here's a simple workflow that makes an outbound call when triggered:
 
 1. Add an **HTTP Request** node
 2. Set **Method** to `POST`
-3. Set **URL** to `https://api.voicebook.ai/v1/calls`
-4. Under **Authentication**, select your VoiceBook AI credential
+3. Set **URL** to `https://api.ringyo.ai/v1/calls`
+4. Under **Authentication**, select your Ringyo AI credential
 5. Enable **Send Body** and add:
    - `to`: The phone number to call
    - `agent_id`: Your voice agent ID
@@ -105,7 +105,7 @@ Trigger an AI call when someone submits a form:
 
 **Flow:**
 1. **Google Forms Trigger** — Watches for new submissions
-2. **HTTP Request** — Calls the lead using VoiceBook AI
+2. **HTTP Request** — Calls the lead using Ringyo AI
 3. **Google Sheets** — Updates submission status
 
 ### Appointment Reminder Calls
@@ -120,7 +120,7 @@ Send reminder calls 24 hours before appointments:
 1. **Schedule Trigger** — Runs daily at 9 AM
 2. **HTTP Request** — Fetches appointments from your calendar/CRM
 3. **Loop** — Iterates through appointments
-4. **HTTP Request** — Makes reminder calls via VoiceBook AI
+4. **HTTP Request** — Makes reminder calls via Ringyo AI
 
 ### Call Results to CRM
 
@@ -131,13 +131,13 @@ Update your CRM when calls complete:
 ```
 
 **Flow:**
-1. **Webhook** — Receives VoiceBook AI webhook events
+1. **Webhook** — Receives Ringyo AI webhook events
 2. **IF** — Checks if event is `call.completed`
 3. **HubSpot** — Updates contact with call outcome
 
 ## Receiving Webhooks
 
-To receive webhook events from VoiceBook AI in n8n:
+To receive webhook events from Ringyo AI in n8n:
 
 <Steps>
   <Step title="Create a Webhook Node">
@@ -146,11 +146,11 @@ To receive webhook events from VoiceBook AI in n8n:
   <Step title="Copy the Webhook URL">
     n8n will generate a URL like `https://your-n8n.com/webhook/abc123`.
   </Step>
-  <Step title="Register in VoiceBook AI">
+  <Step title="Register in Ringyo AI">
     Use the API or Dashboard to create a webhook pointing to your n8n URL:
     
     ```bash
-    curl https://api.voicebook.ai/v1/webhooks \
+    curl https://api.ringyo.ai/v1/webhooks \
       -X POST \
       -H "Authorization: Bearer vb_live_YOUR_API_KEY" \
       -H "Content-Type: application/json" \
@@ -191,16 +191,16 @@ When a call completes, your n8n workflow receives:
 Download ready-to-import n8n workflow templates:
 
 <CardGroup cols={2}>
-  <Card title="Lead Qualifier" icon="filter" href="https://voicebook.ai/templates/n8n-lead-qualifier.json">
+  <Card title="Lead Qualifier" icon="filter" href="https://ringyo.ai/templates/n8n-lead-qualifier.json">
     Automatically qualify leads with AI calls.
   </Card>
-  <Card title="Appointment Reminder" icon="calendar" href="https://voicebook.ai/templates/n8n-appointment-reminder.json">
+  <Card title="Appointment Reminder" icon="calendar" href="https://ringyo.ai/templates/n8n-appointment-reminder.json">
     Send reminder calls before appointments.
   </Card>
-  <Card title="Follow-up Sequence" icon="repeat" href="https://voicebook.ai/templates/n8n-followup-sequence.json">
+  <Card title="Follow-up Sequence" icon="repeat" href="https://ringyo.ai/templates/n8n-followup-sequence.json">
     Multi-touch follow-up automation.
   </Card>
-  <Card title="CRM Sync" icon="sync" href="https://voicebook.ai/templates/n8n-crm-sync.json">
+  <Card title="CRM Sync" icon="sync" href="https://ringyo.ai/templates/n8n-crm-sync.json">
     Sync call results to your CRM.
   </Card>
 </CardGroup>
@@ -225,12 +225,12 @@ Download ready-to-import n8n workflow templates:
   </Accordion>
   
   <Accordion title="Test with Test Mode">
-    Use VoiceBook AI's test mode (prepend calls with `test_`) during development.
+    Use Ringyo AI's test mode (prepend calls with `test_`) during development.
   </Accordion>
 </AccordionGroup>
 
 ## Need Help?
 
 - Check the [API Reference](/api-reference/introduction)
-- Join our [Discord](https://discord.gg/voicebook)
+- Join our [Discord](https://ringyo.ai/contact)
 - See the [n8n documentation](https://docs.n8n.io/)

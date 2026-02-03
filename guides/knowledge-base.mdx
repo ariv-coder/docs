@@ -1,0 +1,76 @@
+---
+title: "Knowledge Base"
+description: "Add FAQs, service details, and business information to train your Ringyo AI agent"
+---
+
+# Knowledge Base
+
+The knowledge base is how you train your AI agent. The more accurate info you provide, the better your agent handles customer questions.
+
+## Adding Knowledge
+
+<Steps>
+  <Step title="Open Knowledge Base">
+    Navigate to **Dashboard → Knowledge Base**.
+  </Step>
+  <Step title="Choose entry type">
+    Click **Add Entry** and select a type:
+    - **FAQ** — a question and answer pair
+    - **Service** — description of a service you offer
+    - **Policy** — business rules (cancellation, refund, etc.)
+    - **General Info** — hours, location, parking, directions, etc.
+  </Step>
+  <Step title="Fill in the content">
+    Provide clear, conversational content. Write answers the way you'd want your agent to say them.
+  </Step>
+  <Step title="Save">
+    Click **Save**. The entry is immediately available to your agent.
+  </Step>
+</Steps>
+
+<Info>Each knowledge base entry costs **2 credits** when created. There's no ongoing cost — the agent references it for free after that.</Info>
+
+## FAQ Examples
+
+Good FAQ entries are specific and conversational:
+
+| Question | Answer |
+|----------|--------|
+| What are your hours? | We're open Monday through Friday, 9 AM to 5 PM, and Saturdays 10 AM to 2 PM. We're closed on Sundays. |
+| Do you accept insurance? | Yes, we accept most major insurance plans including Aetna, Blue Cross, and United. Please bring your insurance card to your appointment. |
+| Where are you located? | We're at 123 Main Street, Suite 200, right across from City Park. Free parking is available in the lot behind our building. |
+
+<Tip>Write answers in a natural, friendly tone. Your agent will use them as-is when responding to callers.</Tip>
+
+## Services
+
+For each service you offer, include:
+- **Name** — e.g., "Teeth Cleaning"
+- **Description** — what it includes
+- **Duration** — how long it takes
+- **Price** (optional) — cost or price range
+
+## Bulk Import
+
+Have a lot of entries? Use the **Import** feature to upload a CSV file:
+
+```csv
+type,question,answer
+faq,What are your hours?,Mon-Fri 9-5 and Sat 10-2
+faq,Do you take walk-ins?,Yes we accept walk-ins based on availability
+service,Teeth Cleaning,Professional cleaning takes about 45 minutes. $120.
+```
+
+## Best Practices
+
+- **Be specific** — "We're at 123 Main St" is better than "See our website"
+- **Keep it current** — update entries when prices, hours, or policies change
+- **Cover common questions** — think about what customers ask most often
+- **Add edge cases** — what should the agent say if someone asks about something you don't offer?
+
+<Warning>Outdated knowledge base entries can lead to your agent giving incorrect information. Review entries regularly.</Warning>
+
+## Next Steps
+
+- [Voice Agent Setup](/guides/voice-agent-setup) — configure your agent
+- [Appointments](/guides/appointments) — set up booking

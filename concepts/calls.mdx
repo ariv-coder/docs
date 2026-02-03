@@ -5,13 +5,13 @@ description: "Making and managing AI phone calls"
 
 # Calls
 
-VoiceBook AI can handle both inbound and outbound phone calls. This guide covers how calls work and how to manage them.
+Ringyo AI can handle both inbound and outbound phone calls. This guide covers how calls work and how to manage them.
 
 ## Call Types
 
 ### Inbound Calls
 
-When someone calls your VoiceBook AI phone number:
+When someone calls your Ringyo AI phone number:
 
 1. Call is answered by your voice agent
 2. Agent greets the caller
@@ -24,7 +24,7 @@ When someone calls your VoiceBook AI phone number:
 Make calls programmatically via API:
 
 ```bash
-curl https://api.voicebook.ai/v1/calls \
+curl https://api.ringyo.ai/v1/calls \
   -X POST \
   -H "Authorization: Bearer vb_live_YOUR_API_KEY" \
   -H "Content-Type: application/json" \
@@ -141,7 +141,7 @@ Every call generates a transcript:
 Calls are recorded by default (can be disabled). Access recordings:
 
 ```bash
-curl https://api.voicebook.ai/v1/calls/call_abc123 \
+curl https://api.ringyo.ai/v1/calls/call_abc123 \
   -H "Authorization: Bearer vb_live_YOUR_API_KEY"
 ```
 
@@ -156,7 +156,7 @@ Response includes `recording_url` for the audio file.
 Make multiple calls with a campaign:
 
 ```bash
-curl https://api.voicebook.ai/v1/campaigns \
+curl https://api.ringyo.ai/v1/campaigns \
   -X POST \
   -H "Authorization: Bearer vb_live_YOUR_API_KEY" \
   -H "Content-Type: application/json" \

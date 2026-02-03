@@ -1,0 +1,93 @@
+---
+title: "Appointments"
+description: "Set up appointment booking with Ringyo AI — calendar integration, time slots, and automated scheduling"
+---
+
+# Appointments
+
+Let your AI agent book appointments for you automatically. Customers can schedule during calls or chat — no human intervention needed.
+
+## Setting Up Appointments
+
+<Steps>
+  <Step title="Enable appointments">
+    Go to **Dashboard → Appointments → Settings** and toggle **Enable Appointment Booking**.
+  </Step>
+  <Step title="Configure services">
+    Add the services customers can book:
+    - **Service name** — e.g., "Consultation", "Teeth Cleaning"
+    - **Duration** — 15, 30, 45, or 60 minutes
+    - **Description** — brief info shown to customers
+  </Step>
+  <Step title="Set available time slots">
+    Define your availability:
+    - Choose available days and hours
+    - Set buffer time between appointments (e.g., 15 minutes)
+    - Block off lunch breaks or unavailable times
+  </Step>
+  <Step title="Connect a calendar (optional)">
+    Sync with your existing calendar to avoid double-bookings:
+    - **Google Calendar**
+    - **Microsoft Outlook**
+    
+    Go to **Appointments → Settings → Calendar Integration** and click **Connect**.
+  </Step>
+  <Step title="Save and test">
+    Save your settings, then test by asking your agent to book an appointment.
+  </Step>
+</Steps>
+
+## How It Works
+
+When a customer wants to book during a call or chat:
+
+1. The agent asks what service they need
+2. Offers available time slots based on your schedule
+3. Collects customer details (name, phone, email)
+4. Confirms the booking and sends a confirmation
+5. The appointment appears in your dashboard and connected calendar
+
+<Info>Each appointment booked costs **1 credit**.</Info>
+
+## Managing Appointments
+
+From **Dashboard → Appointments**, you can:
+
+| Action | Description |
+|--------|-------------|
+| **View** | See all upcoming and past appointments |
+| **Reschedule** | Change the date/time of an existing booking |
+| **Cancel** | Cancel an appointment (optional notification to customer) |
+| **Export** | Download appointments as CSV |
+
+## Notifications
+
+Configure automatic notifications from **Appointments → Settings → Notifications**:
+
+- **Confirmation email** — sent immediately when booked
+- **Reminder** — sent 24 hours or 1 hour before (configurable)
+- **Cancellation** — sent when an appointment is cancelled
+
+## Calendar Integration
+
+<Tabs>
+  <Tab title="Google Calendar">
+    1. Go to **Appointments → Settings → Calendar Integration**
+    2. Click **Connect Google Calendar**
+    3. Sign in and grant access
+    4. Select which calendar to sync with
+  </Tab>
+  <Tab title="Outlook">
+    1. Go to **Appointments → Settings → Calendar Integration**
+    2. Click **Connect Outlook**
+    3. Sign in with your Microsoft account
+    4. Select your calendar
+  </Tab>
+</Tabs>
+
+<Tip>Calendar sync is two-way — appointments booked by Ringyo appear in your calendar, and busy slots from your calendar are blocked in Ringyo.</Tip>
+
+## Next Steps
+
+- [Voice Agent Setup](/guides/voice-agent-setup) — configure your agent to book appointments
+- [Analytics](/guides/analytics) — track appointment metrics

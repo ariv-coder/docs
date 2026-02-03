@@ -1,6 +1,6 @@
 ---
 title: 'Delete Agent'
-api: 'DELETE https://api.voicebook.ai/v1/agents/{agent_id}'
+api: 'DELETE https://api.ringyo.ai/v1/agents/{agent_id}'
 description: 'Delete an agent permanently'
 ---
 
@@ -38,13 +38,13 @@ Returns a confirmation of deletion.
 
 <RequestExample>
 ```bash cURL
-curl -X DELETE https://api.voicebook.ai/v1/agents/agent_abc123 \
+curl -X DELETE https://api.ringyo.ai/v1/agents/agent_abc123 \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
 ```javascript Node.js
 const response = await fetch(
-  'https://api.voicebook.ai/v1/agents/agent_abc123',
+  'https://api.ringyo.ai/v1/agents/agent_abc123',
   {
     method: 'DELETE',
     headers: {
@@ -61,7 +61,7 @@ const result = await response.json();
 import requests
 
 response = requests.delete(
-    'https://api.voicebook.ai/v1/agents/agent_abc123',
+    'https://api.ringyo.ai/v1/agents/agent_abc123',
     headers={'Authorization': 'Bearer YOUR_API_KEY'}
 )
 
