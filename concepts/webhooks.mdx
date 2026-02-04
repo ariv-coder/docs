@@ -55,7 +55,7 @@ Response includes a signing secret:
 |-------|-------------|
 | `call.initiated` | Outbound call started dialing |
 | `call.answered` | Call was answered |
-| `call.completed` | Call ended successfully |
+| `call.completed` | Call ended successfully (includes satisfaction score) |
 | `call.failed` | Call failed (error, busy, no answer) |
 | `call.transferred` | Call transferred to human |
 
@@ -63,10 +63,17 @@ Response includes a signing secret:
 
 | Event | Description |
 |-------|-------------|
-| `appointment.created` | New appointment booked |
-| `appointment.updated` | Appointment modified |
+| `appointment.booked` | New appointment booked by AI agent |
+| `appointment.confirmed` | Appointment confirmed by customer |
+| `appointment.rescheduled` | Appointment moved to new time |
 | `appointment.cancelled` | Appointment cancelled |
+| `appointment.completed` | Appointment marked as completed |
+| `appointment.no_show` | Customer didn't show up |
 | `appointment.reminder` | Reminder was sent |
+
+<Info>
+  These events are Zapier-compatible. Use them with Zapier's webhook trigger or any automation platform.
+</Info>
 
 ### Agent Events
 
@@ -152,7 +159,7 @@ All webhooks follow this structure:
 
 ## Verifying Webhooks
 
-Always verify webhook signatures to ensure they came from Ringyo AI.
+Always verify webhook signatures to ensure they came from Ringyo AI. Webhooks are signed using **HMAC-SHA256**.
 
 ### Signature Header
 
@@ -161,6 +168,10 @@ Each webhook includes a signature:
 ```
 X-Ringyo-Signature: t=1705312800,v1=abc123...
 ```
+
+The signature contains:
+- `t` — Unix timestamp when the webhook was sent
+- `v1` — HMAC-SHA256 hash of `{timestamp}.{payload}`
 
 ### Verification Example
 
@@ -177,13 +188,13 @@ function verifyWebhook(payload, signature, secret) {
     throw new Error('Webhook timestamp too old');
   }
   
-  // Verify signature
+  // Verify HMAC-SHA256 signature
   const expected = crypto
     .createHmac('sha256', secret)
     .update(`${timestamp}.${payload}`)
     .digest('hex');
     
-  if (hash !== expected) {
+  if (!crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(expected))) {
     throw new Error('Invalid webhook signature');
   }
   
@@ -215,12 +226,12 @@ def verify_webhook(payload: str, signature: str, secret: str) -> bool:
     timestamp = parts['t']
     received_hash = parts['v1']
     
-    # Check timestamp is recent
+    # Check timestamp is recent (within 5 minutes)
     age = time.time() - int(timestamp)
     if age > 300:
         raise ValueError('Webhook timestamp too old')
     
-    # Verify signature
+    # Verify HMAC-SHA256 signature
     expected = hmac.new(
         secret.encode(),
         f"{timestamp}.{payload}".encode(),
@@ -231,6 +242,63 @@ def verify_webhook(payload: str, signature: str, secret: str) -> bool:
         raise ValueError('Invalid webhook signature')
     
     return True
+```
+
+```php PHP
+function verifyWebhook(string $payload, string $signature, string $secret): bool {
+    preg_match('/t=(\d+),v1=(.+)/', $signature, $matches);
+    $timestamp = $matches[1];
+    $hash = $matches[2];
+    
+    // Check timestamp is recent (within 5 minutes)
+    if (time() - intval($timestamp) > 300) {
+        throw new Exception('Webhook timestamp too old');
+    }
+    
+    // Verify HMAC-SHA256 signature
+    $expected = hash_hmac('sha256', "{$timestamp}.{$payload}", $secret);
+    
+    if (!hash_equals($expected, $hash)) {
+        throw new Exception('Invalid webhook signature');
+    }
+    
+    return true;
+}
+```
+
+```go Go
+import (
+    "crypto/hmac"
+    "crypto/sha256"
+    "encoding/hex"
+    "errors"
+    "strconv"
+    "strings"
+    "time"
+)
+
+func VerifyWebhook(payload, signature, secret string) error {
+    parts := strings.Split(signature, ",")
+    timestamp := strings.TrimPrefix(parts[0], "t=")
+    hash := strings.TrimPrefix(parts[1], "v1=")
+    
+    // Check timestamp is recent (within 5 minutes)
+    ts, _ := strconv.ParseInt(timestamp, 10, 64)
+    if time.Now().Unix()-ts > 300 {
+        return errors.New("webhook timestamp too old")
+    }
+    
+    // Verify HMAC-SHA256 signature
+    mac := hmac.New(sha256.New, []byte(secret))
+    mac.Write([]byte(timestamp + "." + payload))
+    expected := hex.EncodeToString(mac.Sum(nil))
+    
+    if !hmac.Equal([]byte(hash), []byte(expected)) {
+        return errors.New("invalid webhook signature")
+    }
+    
+    return nil
+}
 ```
 </CodeGroup>
 
@@ -248,6 +316,20 @@ If your endpoint doesn't respond with `2xx`:
 2. **Process async** — Queue heavy processing for background
 3. **Be idempotent** — Handle duplicate deliveries gracefully
 4. **Monitor health** — Check webhook status in dashboard
+
+## Delivery Logs
+
+Monitor webhook delivery in the **Developers → Webhooks** dashboard:
+
+- **Recent deliveries** — See the last 100 webhook attempts
+- **Status** — Success (2xx), Failed, or Pending retry
+- **Response time** — How long your server took to respond
+- **Payload** — View the exact JSON sent
+- **Response** — See your server's response (for debugging)
+
+<Tip>
+  Use delivery logs to debug integration issues. Failed webhooks show the error response from your server.
+</Tip>
 
 ## Testing Webhooks
 

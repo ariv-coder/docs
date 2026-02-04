@@ -1,0 +1,151 @@
+---
+title: 'Google Calendar Integration'
+description: 'Sync appointments with Google Calendar for seamless scheduling'
+icon: 'calendar'
+---
+
+## Overview
+
+Connect your Google Calendar to Ringyo AI for seamless two-way appointment synchronization. When your AI agent books an appointment, it automatically appears in your calendar. Reschedules and cancellations sync instantly.
+
+## Connecting Google Calendar
+
+<Steps>
+  <Step title="Open Settings">
+    Navigate to **Dashboard → Settings → Integrations**
+  </Step>
+  <Step title="Connect Google">
+    Click **Connect** next to Google Calendar
+  </Step>
+  <Step title="Authorize Access">
+    Sign in with your Google account and grant Ringyo permission to manage calendar events
+  </Step>
+  <Step title="Select Calendar">
+    Choose which calendar to sync appointments with (you can select multiple)
+  </Step>
+</Steps>
+
+<Tip>
+  Use a dedicated calendar for Ringyo appointments to keep your personal events separate.
+</Tip>
+
+## How Sync Works
+
+### Ringyo → Google Calendar
+
+When your AI agent books, reschedules, or cancels an appointment:
+
+| Action | Google Calendar Result |
+|--------|----------------------|
+| Appointment booked | New event created with customer details |
+| Appointment rescheduled | Event time updated automatically |
+| Appointment cancelled | Event deleted from calendar |
+| Appointment confirmed | Event status updated |
+
+### Google Calendar → Ringyo
+
+Changes made directly in Google Calendar sync back:
+
+| Action | Ringyo Result |
+|--------|---------------|
+| Event deleted | Appointment marked as cancelled |
+| Event time changed | Appointment rescheduled |
+| Event cancelled | Appointment cancelled, customer notified (if enabled) |
+
+<Info>
+  Two-way sync ensures your calendar is always the source of truth. Block time in Google Calendar and your AI agent will respect your availability.
+</Info>
+
+## Event Details
+
+Synced events include:
+
+```
+Title: Appointment - John Smith
+Time: Tuesday, Feb 4, 2026 at 2:00 PM
+Duration: 45 minutes
+
+Description:
+Customer: John Smith
+Phone: +1 (555) 123-4567
+Email: john@example.com
+Service: Dental Cleaning
+Notes: First-time patient, prefers morning appointments
+
+Booked via: Ringyo AI
+Call ID: call_abc123
+```
+
+## Multiple Calendars
+
+You can connect multiple Google accounts or calendars:
+
+- **Per-agent calendars**: Assign different calendars to different agents
+- **Team calendars**: Sync to a shared team calendar
+- **Personal + Work**: Keep business appointments separate
+
+Configure calendar routing in **Settings → Integrations → Google Calendar → Calendar Mapping**.
+
+## Availability Sync
+
+Your Google Calendar availability is automatically respected:
+
+- Existing events block those time slots
+- All-day events can optionally block the full day
+- Buffer time between appointments is configurable
+- Working hours from Google Calendar are honored
+
+## Webhook Support
+
+For advanced integrations, enable webhook notifications for calendar changes:
+
+1. Go to **Settings → Integrations → Google Calendar**
+2. Enable **Webhook Notifications**
+3. Configure your endpoint URL
+
+Events sent:
+
+| Event | Description |
+|-------|-------------|
+| `calendar.event_created` | New event added in Google Calendar |
+| `calendar.event_updated` | Event modified |
+| `calendar.event_deleted` | Event removed |
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Events not syncing">
+    - Verify the integration is connected in Settings
+    - Check that the correct calendar is selected
+    - Ensure Ringyo has permission to manage events
+    - Try disconnecting and reconnecting the integration
+  </Accordion>
+  
+  <Accordion title="Duplicate events">
+    - This can happen if you manually create events. Let Ringyo handle appointment creation.
+    - Check if you have multiple integrations connected to the same calendar
+  </Accordion>
+  
+  <Accordion title="Wrong timezone">
+    - Verify your timezone in **Settings → Business → Timezone**
+    - Check your Google Calendar timezone settings match
+  </Accordion>
+  
+  <Accordion title="Availability not updating">
+    - Sync happens every few minutes. Force a sync from Settings.
+    - Ensure "Use calendar for availability" is enabled
+  </Accordion>
+</AccordionGroup>
+
+## Privacy & Security
+
+- Ringyo only accesses calendars you explicitly select
+- We never read unrelated calendar events
+- You can revoke access anytime from Google Account settings
+- All data is encrypted in transit and at rest
+
+## Next Steps
+
+- [Appointments Guide](/guides/appointments) — configure appointment settings
+- [Webhooks](/concepts/webhooks) — set up real-time notifications
+- [Analytics](/guides/analytics) — track appointment metrics

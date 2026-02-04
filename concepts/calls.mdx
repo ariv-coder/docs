@@ -205,6 +205,54 @@ Calls are billed based on duration:
 
 Check your usage in **Dashboard → Billing**.
 
+## Post-Call Satisfaction Survey
+
+Ringyo AI can collect caller feedback at the end of each call using a DTMF (touch-tone) survey.
+
+### How It Works
+
+1. After the conversation ends, the agent asks: *"Before you go, how would you rate this call? Press 1 for poor, 2 for okay, or 3 for great."*
+2. Caller presses a key on their phone
+3. Rating is recorded and visible in analytics
+
+### Rating Scale
+
+| Key Press | Rating | Score |
+|-----------|--------|-------|
+| 1 | Poor | 1-2 |
+| 2 | Okay | 3 |
+| 3 | Great | 4-5 |
+
+### Enabling Surveys
+
+1. Go to **Settings → Voice Agent → Post-Call Survey**
+2. Toggle **Enable satisfaction survey**
+3. Optionally customize the survey prompt
+
+### Viewing Results
+
+Satisfaction scores appear in multiple places:
+
+- **Call details** — Individual call pages show the rating
+- **Analytics → Calls** — Average satisfaction and distribution charts
+- **Webhooks** — `satisfaction_score` included in `call.completed` payload
+
+```json
+{
+  "event": "call.completed",
+  "data": {
+    "call_id": "call_abc123",
+    "satisfaction_score": 5,
+    "satisfaction_response": "great",
+    // ... other fields
+  }
+}
+```
+
+<Info>
+  Calls where the customer hangs up before the survey show `satisfaction_score: null`.
+</Info>
+
 ## Best Practices
 
 1. **Test before bulk calling** — Make test calls to verify agent behavior
@@ -212,6 +260,7 @@ Check your usage in **Dashboard → Billing**.
 3. **Include context** — Personalized calls are more effective
 4. **Handle failures** — Set up retry logic for no-answers
 5. **Monitor outcomes** — Use webhooks to track results
+6. **Review low-rated calls** — Listen to recordings of 1-2 star calls to improve
 
 ## Next Steps
 

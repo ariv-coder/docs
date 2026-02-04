@@ -47,6 +47,7 @@
           {
             "group": "Integrations",
             "pages": [
+              "integrations/google-calendar",
               "integrations/n8n",
               "integrations/zapier",
               "integrations/make"
